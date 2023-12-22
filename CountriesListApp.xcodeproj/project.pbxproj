@@ -14,6 +14,11 @@
 		F34CB9CE2B344A2300F8EF83 /* CountriesListApp.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = F34CB9CC2B344A2300F8EF83 /* CountriesListApp.xcdatamodeld */; };
 		F34CB9D02B344A2400F8EF83 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F34CB9CF2B344A2400F8EF83 /* Assets.xcassets */; };
 		F34CB9D32B344A2400F8EF83 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F34CB9D12B344A2400F8EF83 /* LaunchScreen.storyboard */; };
+		F34CB9E02B344C0C00F8EF83 /* CountriesListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F34CB9DF2B344C0C00F8EF83 /* CountriesListModel.swift */; };
+		F34CB9E22B344C1D00F8EF83 /* CountriesListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F34CB9E12B344C1D00F8EF83 /* CountriesListViewController.swift */; };
+		F34CB9E42B344C3D00F8EF83 /* CountriesListPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F34CB9E32B344C3D00F8EF83 /* CountriesListPresenter.swift */; };
+		F34CB9E62B344C5100F8EF83 /* CountriesLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F34CB9E52B344C5100F8EF83 /* CountriesLoader.swift */; };
+		F34CB9E92B344CBC00F8EF83 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = F34CB9E82B344CBC00F8EF83 /* Constants.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +31,11 @@
 		F34CB9CF2B344A2400F8EF83 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F34CB9D22B344A2400F8EF83 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		F34CB9D42B344A2400F8EF83 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F34CB9DF2B344C0C00F8EF83 /* CountriesListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountriesListModel.swift; sourceTree = "<group>"; };
+		F34CB9E12B344C1D00F8EF83 /* CountriesListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountriesListViewController.swift; sourceTree = "<group>"; };
+		F34CB9E32B344C3D00F8EF83 /* CountriesListPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountriesListPresenter.swift; sourceTree = "<group>"; };
+		F34CB9E52B344C5100F8EF83 /* CountriesLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountriesLoader.swift; sourceTree = "<group>"; };
+		F34CB9E82B344CBC00F8EF83 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +68,8 @@
 		F34CB9C22B344A2300F8EF83 /* CountriesListApp */ = {
 			isa = PBXGroup;
 			children = (
+				F34CB9E72B344C9A00F8EF83 /* Helpers */,
+				F34CB9DE2B344BDF00F8EF83 /* CountriesList */,
 				F34CB9C32B344A2300F8EF83 /* AppDelegate.swift */,
 				F34CB9C52B344A2300F8EF83 /* SceneDelegate.swift */,
 				F34CB9C72B344A2300F8EF83 /* ViewController.swift */,
@@ -68,6 +80,57 @@
 				F34CB9CC2B344A2300F8EF83 /* CountriesListApp.xcdatamodeld */,
 			);
 			path = CountriesListApp;
+			sourceTree = "<group>";
+		};
+		F34CB9DA2B344BB900F8EF83 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				F34CB9DF2B344C0C00F8EF83 /* CountriesListModel.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		F34CB9DB2B344BC100F8EF83 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				F34CB9E12B344C1D00F8EF83 /* CountriesListViewController.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		F34CB9DC2B344BC800F8EF83 /* Presenter */ = {
+			isa = PBXGroup;
+			children = (
+				F34CB9E32B344C3D00F8EF83 /* CountriesListPresenter.swift */,
+			);
+			path = Presenter;
+			sourceTree = "<group>";
+		};
+		F34CB9DD2B344BCF00F8EF83 /* Networking */ = {
+			isa = PBXGroup;
+			children = (
+				F34CB9E52B344C5100F8EF83 /* CountriesLoader.swift */,
+			);
+			path = Networking;
+			sourceTree = "<group>";
+		};
+		F34CB9DE2B344BDF00F8EF83 /* CountriesList */ = {
+			isa = PBXGroup;
+			children = (
+				F34CB9DA2B344BB900F8EF83 /* Model */,
+				F34CB9DB2B344BC100F8EF83 /* View */,
+				F34CB9DC2B344BC800F8EF83 /* Presenter */,
+				F34CB9DD2B344BCF00F8EF83 /* Networking */,
+			);
+			path = CountriesList;
+			sourceTree = "<group>";
+		};
+		F34CB9E72B344C9A00F8EF83 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				F34CB9E82B344CBC00F8EF83 /* Constants.swift */,
+			);
+			path = Helpers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -141,10 +204,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F34CB9E42B344C3D00F8EF83 /* CountriesListPresenter.swift in Sources */,
+				F34CB9E02B344C0C00F8EF83 /* CountriesListModel.swift in Sources */,
+				F34CB9E22B344C1D00F8EF83 /* CountriesListViewController.swift in Sources */,
+				F34CB9E62B344C5100F8EF83 /* CountriesLoader.swift in Sources */,
 				F34CB9C82B344A2300F8EF83 /* ViewController.swift in Sources */,
 				F34CB9C42B344A2300F8EF83 /* AppDelegate.swift in Sources */,
 				F34CB9CE2B344A2300F8EF83 /* CountriesListApp.xcdatamodeld in Sources */,
 				F34CB9C62B344A2300F8EF83 /* SceneDelegate.swift in Sources */,
+				F34CB9E92B344CBC00F8EF83 /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
