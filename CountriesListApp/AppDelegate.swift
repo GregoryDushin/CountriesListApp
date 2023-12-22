@@ -22,6 +22,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let initialViewController = storyboard.instantiateViewController(
             withIdentifier: "CountriesListViewController"
         ) as? CountriesListViewController
+        
         initialViewController?.presenter = CountriesListPresenter(countryLoader: CountryLoader())
 
         self.window?.rootViewController = initialViewController

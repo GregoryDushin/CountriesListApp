@@ -7,17 +7,8 @@
 
 import Foundation
 
-protocol CountriesListProtocol: AnyObject {
-    func success(data: [Country])
-    func failure(error: Error)
-}
-
-protocol CountriesListPresenterProtocol: AnyObject {
-    func getData()
-    var view: CountriesListProtocol? { get set }
-}
-
 final class CountriesListPresenter: CountriesListPresenterProtocol {
+
     weak var view: CountriesListProtocol?
     private let countryLoader: CountryLoaderProtocol
 
@@ -27,7 +18,7 @@ final class CountriesListPresenter: CountriesListPresenterProtocol {
 
     func getData() {
         countryLoader.countryDataLoad { [weak self] result in
-            guard let self = self else { return }
+            guard let self else { return }
             DispatchQueue.main.async {
                 switch result {
                 case .success(let countries):
@@ -39,3 +30,4 @@ final class CountriesListPresenter: CountriesListPresenterProtocol {
         }
     }
 }
+

@@ -7,11 +7,8 @@
 
 import Foundation
 
-protocol CountryLoaderProtocol {
-    func countryDataLoad(completion: @escaping (Result<[Country], Error>) -> Void)
-}
-
 final class CountryLoader: CountryLoaderProtocol {
+
     private let decoder = JSONDecoder()
     private let session = URLSession.shared
     
@@ -24,22 +21,16 @@ final class CountryLoader: CountryLoaderProtocol {
     }
     
     private func loadCountryData(url: URL?, completion: @escaping (Result<[Country], Error>) -> Void) {
-        guard let url = url else { return }
+        guard let url else { return }
 
         let task = session.dataTask(with: url) { data, _, error in
-            guard let data = data else {
-                completion(.failure(error ?? NSError(domain: "", code: -1, userInfo: nil)))
-                return
-            }
+            guard let data else { return }
             
             do {
                 let json = try self.decoder.decode(CountryResponse.self, from: data)
                 let countries = json.countries
                 completion(.success(countries))
-                
-                if let nextURL = URL(string: json.next) {
-                    self.loadCountryData(url: nextURL, completion: completion)
-                }
+
             } catch {
                 completion(.failure(error))
             }

@@ -7,12 +7,12 @@
 
 import Foundation
 
-struct CountryResponse: Codable {
+struct CountryResponse: Decodable {
     let next: String
     let countries: [Country]
 }
 
-struct Country: Codable {
+struct Country: Decodable {
     let name: String
     let continent: String
     let capital: String
@@ -23,7 +23,7 @@ struct Country: Codable {
     let countryInfo: CountryInfo
 }
 
-struct CountryInfo: Codable {
+struct CountryInfo: Decodable {
     let images: [String]
     let flag: String
 }
