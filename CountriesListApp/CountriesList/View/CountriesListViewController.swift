@@ -20,7 +20,7 @@ final class CountriesListViewController: UIViewController {
         presenter?.getData()
     }
 
-    private func printTest() {
+    private func printCountryTest() {
         print(countries)
     }
 
@@ -31,13 +31,13 @@ final class CountriesListViewController: UIViewController {
 }
 
 extension CountriesListViewController: CountriesListProtocol {
-
     func success(data: [Country]) {
         countries = data
-        printTest()
+        printCountryTest()
     }
-
+    
     func failure(error: Error) {
         showAlert(error.localizedDescription)
+        print(error.localizedDescription)
     }
 }

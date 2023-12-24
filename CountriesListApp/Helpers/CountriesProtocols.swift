@@ -7,16 +7,16 @@
 
 import Foundation
 
-//protocol CountriesListProtocol: AnyObject {
-//    func success(data: [Country])
-//    func failure(error: Error)
-//}
-//
-//protocol CountriesListPresenterProtocol: AnyObject {
-//    func getData()
-//    var view: CountriesListProtocol? { get set }
-//}
-//
-//protocol CountryLoaderProtocol {
-//    func countryDataLoad(completion: @escaping (Result<[Country], Error>) -> Void)
-//}
+protocol DataLoadable {
+    func loadData<ResultType: Decodable>(from url: String, responseType: ResultType.Type, completion: @escaping (Result<ResultType, Error>) -> Void)
+}
+
+protocol CountriesListProtocol: AnyObject {
+    func success(data: [Country])
+    func failure(error: Error)
+}
+
+protocol CountriesListPresenterProtocol: AnyObject {
+    func getData()
+    var view: CountriesListProtocol? { get set }
+}

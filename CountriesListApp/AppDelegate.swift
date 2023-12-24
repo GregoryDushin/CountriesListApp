@@ -23,7 +23,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             withIdentifier: "CountriesListViewController"
         ) as? CountriesListViewController
         
-        initialViewController?.presenter = CountriesListPresenter(countryLoader: CountryLoader())
+        initialViewController?.presenter = CountriesListPresenter(dataLoader: DataLoader())
 
         self.window?.rootViewController = initialViewController
         self.window?.makeKeyAndVisible()

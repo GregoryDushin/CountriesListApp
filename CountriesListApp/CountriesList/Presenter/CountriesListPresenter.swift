@@ -7,66 +7,30 @@
 
 import Foundation
 
-//final class CountriesListPresenter: CountriesListPresenterProtocol {
-//
-//    weak var view: CountriesListProtocol?
-//    private let countryLoader: CountryLoaderProtocol
-//
-//    init(countryLoader: CountryLoaderProtocol) {
-//        self.countryLoader = countryLoader
-//    }
-//
-//    func getData() {
-//        countryLoader.countryDataLoad { [weak self] result in
-//            guard let self else { return }
-//            DispatchQueue.main.async {
-//                switch result {
-//                case .success(let countries):
-//                    self.view?.success(data: countries)
-//                case .failure(let error):
-//                    self.view?.failure(error: error)
-//                }
-//            }
-//        }
-//    }
-//}
-
 // MARK: Presenter with universal Loader
 
-protocol CountriesListProtocol: AnyObject {
-    associatedtype DataType: Decodable
-    func success(data: [DataType])
-    func failure(error: Error)
-}
-
-protocol CountriesListPresenterProtocol: AnyObject {
-    associatedtype DataType: Decodable
-    var view: (any CountriesListProtocol)? { get set }
-    func getData()
-}
-
-final class CountriesListPresenter<T: Decodable>: CountriesListPresenterProtocol {
-    typealias DataType = T
+final class CountriesListPresenter: CountriesListPresenterProtocol {
     
-    weak var view: (any CountriesListProtocol)?
-    private let dataLoader: any DataLoadable
+    weak var view: CountriesListProtocol?
+    private let dataLoader: DataLoader
     
-    init(dataLoader: any DataLoadable) {
+    init(dataLoader: DataLoader) {
         self.dataLoader = dataLoader
     }
+    
     func getData() {
-           dataLoader.loadData { [weak self] result in
-               //Member 'loadData' cannot be used on value of type 'any DataLoadable'; consider using a generic constraint instead
-               guard let self = self else { return }
-               DispatchQueue.main.async {
-                   switch result {
-                   case .success(let data):
-                       self.view?.success(data: data)
-                       //Cannot convert value of type '[any Swift.Decodable]' to expected argument type '[any Swift.Decodable]'
-                   case .failure(let error):
-                       self.view?.failure(error: error)
-                   }
-               }
-           }
-       }
-   }
+        dataLoader.loadData(from: Url.countriesUrl, responseType: CountryResponse.self) { [weak self] result in
+            guard let self else { return }
+
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let data):
+                    let countries = data.countries
+                    self.view?.success(data: countries)
+                case .failure(let error):
+                    self.view?.failure(error: error)
+                }
+            }
+        }
+    }
+}
