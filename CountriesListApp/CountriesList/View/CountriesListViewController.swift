@@ -38,6 +38,5 @@ extension CountriesListViewController: CountriesListProtocol {
     
     func failure(error: Error) {
         showAlert(error.localizedDescription)
-        print(error.localizedDescription)
     }
 }

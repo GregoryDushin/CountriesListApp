@@ -18,12 +18,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
     ) -> Bool {
         self.window = UIWindow(frame: UIScreen.main.bounds)
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let initialViewController = storyboard.instantiateViewController(
-            withIdentifier: "CountriesListViewController"
-        ) as? CountriesListViewController
-        
-        initialViewController?.presenter = CountriesListPresenter(dataLoader: DataLoader())
+        let initialViewController = CountriesListViewController()
+        initialViewController.presenter = CountriesListPresenter(dataLoader: DataLoader())
 
         self.window?.rootViewController = initialViewController
         self.window?.makeKeyAndVisible()
