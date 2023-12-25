@@ -14,4 +14,5 @@ enum Url {
 enum LoaderError: Error {
     case networkRequestFailed
     case unsuppotedURL
+    case invalidImageData
 }

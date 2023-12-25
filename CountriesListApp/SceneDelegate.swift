@@ -18,7 +18,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let window = UIWindow(windowScene: windowScene)
         
         let initialViewController = CountriesListViewController()
-        initialViewController.presenter = CountriesListPresenter(dataLoader: DataLoader())
+        initialViewController.presenter = CountriesListPresenter(dataLoader: DataLoader(), imageLoader: ImageLoader())
 
         window.rootViewController = initialViewController
         window.makeKeyAndVisible()

@@ -19,7 +19,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     ) -> Bool {
         self.window = UIWindow(frame: UIScreen.main.bounds)
         let initialViewController = CountriesListViewController()
-        initialViewController.presenter = CountriesListPresenter(dataLoader: DataLoader())
+        initialViewController.presenter = CountriesListPresenter(dataLoader: DataLoader(), imageLoader: ImageLoader())
 
         self.window?.rootViewController = initialViewController
         self.window?.makeKeyAndVisible()

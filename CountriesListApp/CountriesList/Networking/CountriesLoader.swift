@@ -36,6 +36,7 @@ final class DataLoader: DataLoadable {
                 completion(.failure(error))
             }
         }
+
         task.resume()
     }
 }
