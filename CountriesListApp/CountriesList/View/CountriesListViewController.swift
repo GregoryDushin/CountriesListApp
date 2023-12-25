@@ -16,28 +16,28 @@ final class CountriesListViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.presenter?.view = self
-        self.presenter?.getData()
+        presenter?.view = self
+        presenter?.getData()
     }
 
-    private func printTest() {
+    private func printCountryTest() {
         print(countries)
     }
 
     private func showAlert(_ error: String) {
         let alert = UIAlertController(title: "Error", message: error, preferredStyle: .alert)
-        self.present(alert, animated: true)
+        present(alert, animated: true)
     }
 }
 
 extension CountriesListViewController: CountriesListProtocol {
-
     func success(data: [Country]) {
-        self.countries = data
-        self.printTest()
+        countries = data
+        printCountryTest()
     }
-
+    
     func failure(error: Error) {
-        self.showAlert(error.localizedDescription)
+        showAlert(error.localizedDescription)
+        print(error.localizedDescription)
     }
 }

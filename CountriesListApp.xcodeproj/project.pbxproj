@@ -19,6 +19,7 @@
 		F34CB9E42B344C3D00F8EF83 /* CountriesListPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F34CB9E32B344C3D00F8EF83 /* CountriesListPresenter.swift */; };
 		F34CB9E62B344C5100F8EF83 /* CountriesLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F34CB9E52B344C5100F8EF83 /* CountriesLoader.swift */; };
 		F34CB9E92B344CBC00F8EF83 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = F34CB9E82B344CBC00F8EF83 /* Constants.swift */; };
+		F37A98992B3601DA004F811D /* CountriesProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = F37A98982B3601DA004F811D /* CountriesProtocols.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,6 +37,7 @@
 		F34CB9E32B344C3D00F8EF83 /* CountriesListPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountriesListPresenter.swift; sourceTree = "<group>"; };
 		F34CB9E52B344C5100F8EF83 /* CountriesLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountriesLoader.swift; sourceTree = "<group>"; };
 		F34CB9E82B344CBC00F8EF83 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		F37A98982B3601DA004F811D /* CountriesProtocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountriesProtocols.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -129,6 +131,7 @@
 			isa = PBXGroup;
 			children = (
 				F34CB9E82B344CBC00F8EF83 /* Constants.swift */,
+				F37A98982B3601DA004F811D /* CountriesProtocols.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -212,6 +215,7 @@
 				F34CB9C42B344A2300F8EF83 /* AppDelegate.swift in Sources */,
 				F34CB9CE2B344A2300F8EF83 /* CountriesListApp.xcdatamodeld in Sources */,
 				F34CB9C62B344A2300F8EF83 /* SceneDelegate.swift in Sources */,
+				F37A98992B3601DA004F811D /* CountriesProtocols.swift in Sources */,
 				F34CB9E92B344CBC00F8EF83 /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

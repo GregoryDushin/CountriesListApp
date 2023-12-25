@@ -7,30 +7,25 @@
 
 import Foundation
 
-protocol CountriesListProtocol: AnyObject {
-    func success(data: [Country])
-    func failure(error: Error)
-}
-
-protocol CountriesListPresenterProtocol: AnyObject {
-    func getData()
-    var view: CountriesListProtocol? { get set }
-}
+// MARK: Presenter with universal Loader
 
 final class CountriesListPresenter: CountriesListPresenterProtocol {
+    
     weak var view: CountriesListProtocol?
-    private let countryLoader: CountryLoaderProtocol
-
-    init(countryLoader: CountryLoaderProtocol) {
-        self.countryLoader = countryLoader
+    private let dataLoader: DataLoader
+    
+    init(dataLoader: DataLoader) {
+        self.dataLoader = dataLoader
     }
-
+    
     func getData() {
-        countryLoader.countryDataLoad { [weak self] result in
-            guard let self = self else { return }
+        dataLoader.loadData(from: Url.countriesUrl, responseType: CountryResponse.self) { [weak self] result in
+            guard let self else { return }
+
             DispatchQueue.main.async {
                 switch result {
-                case .success(let countries):
+                case .success(let data):
+                    let countries = data.countries
                     self.view?.success(data: countries)
                 case .failure(let error):
                     self.view?.failure(error: error)
