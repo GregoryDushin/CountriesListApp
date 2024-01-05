@@ -17,12 +17,19 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         let window = UIWindow(windowScene: windowScene)
         
-        let initialViewController = CountriesListViewController()
-        initialViewController.presenter = CountriesListPresenter(dataLoader: DataLoader(), imageLoader: ImageLoader())
-
+        let initialViewController = ViewControllerFactory.countriesVC()
+        
         window.rootViewController = initialViewController
         window.makeKeyAndVisible()
         self.window = window
     }
 }
 
+struct ViewControllerFactory {
+    static func countriesVC() -> CountriesListViewController {
+        let initialViewController = CountriesListViewController()
+        initialViewController.presenter = CountriesListPresenter(dataLoader: DataLoader())
+        return initialViewController
+                                    
+    }
+}

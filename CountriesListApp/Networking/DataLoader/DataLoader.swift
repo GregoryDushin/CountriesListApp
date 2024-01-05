@@ -7,8 +7,6 @@
 
 import Foundation
 
-// MARK: Universal Loader
-
 final class DataLoader: DataLoadable {
     private let decoder = JSONDecoder()
     private let session = URLSession.shared

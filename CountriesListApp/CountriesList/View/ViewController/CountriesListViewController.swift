@@ -18,7 +18,7 @@ final class CountriesListViewController: UIViewController {
     private lazy var tableView: UITableView = {
         let tableView = UITableView(frame: view.bounds, style: .plain)
         tableView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        tableView.register(UINib(nibName: String(describing: CustomTableViewCell.self), bundle: nil), forCellReuseIdentifier: String(describing: CustomTableViewCell.self))
+        tableView.register(UINib(nibName: Id.customTableViewCell, bundle: nil), forCellReuseIdentifier: Id.customTableViewCell)
         tableView.dataSource = self
         tableView.delegate = self
         return tableView
@@ -27,14 +27,8 @@ final class CountriesListViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         presenter?.view = self
-        presenter?.getData { [weak self] in
-            self?.tableView.reloadData()
-        }
+        presenter?.getData()
         view.addSubview(tableView)
-    }
-    
-    private func printCountryTest() {
-        print(countries)
     }
     
     private func showAlert(_ error: String) {
@@ -43,11 +37,12 @@ final class CountriesListViewController: UIViewController {
     }
 }
 
+// MARK: - CountriesListProtocol
+
 extension CountriesListViewController: CountriesListProtocol {
     func success(data: [Country], img: [UIImage]) {
         countries = data
         imgs = img
-        
         DispatchQueue.main.async {
             self.tableView.reloadData()
         }
@@ -55,9 +50,10 @@ extension CountriesListViewController: CountriesListProtocol {
     
     func failure(error: Error) {
         showAlert(error.localizedDescription)
-        print(error.localizedDescription)
     }
 }
+
+// MARK: - UITableViewDataSource & UITableViewDelegate
 
 extension CountriesListViewController: UITableViewDataSource, UITableViewDelegate {
     
@@ -66,13 +62,12 @@ extension CountriesListViewController: UITableViewDataSource, UITableViewDelegat
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: CustomTableViewCell.self), for: indexPath) as? CustomTableViewCell else {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: Id.customTableViewCell, for: indexPath) as? CustomTableViewCell else {
             return UITableViewCell()
         }
 
         let country = countries[indexPath.row]
-        let flag = imgs[indexPath.row]
-        cell.configure(with: country, image: flag)
+        cell.configure(with: country, imageLoader: ImageLoader())
         return cell
     }
     
