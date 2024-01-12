@@ -8,8 +8,6 @@
 import Foundation
 import UIKit
 
-// MARK: Presenter with universal Loader
-
 final class CountriesListPresenter: CountriesListPresenterProtocol {
     
     weak var view: CountriesListProtocol?

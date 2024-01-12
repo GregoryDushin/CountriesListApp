@@ -15,7 +15,7 @@ final class CustomTableViewCell: UITableViewCell {
     @IBOutlet private var capitalLabel: UILabel!
     
     private var imageLoader: ImageLoader?
-        private var imageURL: String?
+    private var imageURL: String?
 
     func configure(with country: Country, imageLoader: ImageLoader) {
         nameLabel.text = country.name
