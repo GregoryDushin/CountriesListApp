@@ -72,5 +72,13 @@ extension CountriesListViewController: UITableViewDataSource, UITableViewDelegat
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let selectedCountry = countries[indexPath.row]
+            
+            let countryInfoVC = CountryInfoViewController(nibName: "CountryInfoViewController", bundle: nil)
+        countryInfoVC.presenter = CountryInfoPresenter(country: selectedCountry)
+            
+            navigationController?.pushViewController(countryInfoVC, animated: true)
+        
+        tableView.deselectRow(at: indexPath, animated: true)
     }
 }
