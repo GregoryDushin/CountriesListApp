@@ -7,8 +7,14 @@
 
 import UIKit
 
-class CountryInfoTableViewCell: UITableViewCell {
-    @IBOutlet var imageInfo: UIImageView!
-    @IBOutlet var constantLabel: UILabel!
-    @IBOutlet var infoLabel: UILabel!
+ final class CountryInfoTableViewCell: UITableViewCell {
+    @IBOutlet private var imageInfo: UIImageView!
+    @IBOutlet private var constantLabel: UILabel!
+    @IBOutlet private var infoLabel: UILabel!
+    
+    func configure(constantText: String, infoText: String, image: UIImage) {
+        imageInfo.image = image
+        constantLabel.text = constantText
+        infoLabel.text = infoText
+    }
 }

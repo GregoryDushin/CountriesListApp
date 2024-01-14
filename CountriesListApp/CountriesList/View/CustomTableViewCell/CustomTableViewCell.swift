@@ -21,7 +21,6 @@ final class CustomTableViewCell: UITableViewCell {
         nameLabel.text = country.name
         descriptionLabel.text = country.descriptionSmall
         capitalLabel.text = country.capital
-        
         imageURL = country.countryInfo.flag
         self.imageLoader = imageLoader
         
@@ -29,10 +28,10 @@ final class CustomTableViewCell: UITableViewCell {
     }
     
     private func loadImage() {
-        guard let imageURL , let imageLoader else { return }
+        guard let imageURL, let imageLoader else { return }
         
         imageLoader.loadImage(from: imageURL) { [weak self] result in
-            guard let self = self else { return }
+            guard let self else { return }
             
             switch result {
             case .success(let image):

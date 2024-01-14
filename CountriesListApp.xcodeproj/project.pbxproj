@@ -16,6 +16,9 @@
 		F321B0DE2B518819009E416C /* CountryDescriptionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F321B0DC2B518819009E416C /* CountryDescriptionTableViewCell.swift */; };
 		F321B0DF2B518819009E416C /* CountryDescriptionTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F321B0DD2B518819009E416C /* CountryDescriptionTableViewCell.xib */; };
 		F321B0E12B518A0B009E416C /* PresenterCountryInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = F321B0E02B518A0B009E416C /* PresenterCountryInfo.swift */; };
+		F321B0E42B543CEE009E416C /* ModelCountryInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = F321B0E32B543CEE009E416C /* ModelCountryInfo.swift */; };
+		F321B0E62B548975009E416C /* PresenterCountryInfoProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = F321B0E52B548975009E416C /* PresenterCountryInfoProtocol.swift */; };
+		F321B0E82B5489AB009E416C /* CountryInfoViewControllerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = F321B0E72B5489AB009E416C /* CountryInfoViewControllerProtocol.swift */; };
 		F34CB9C42B344A2300F8EF83 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F34CB9C32B344A2300F8EF83 /* AppDelegate.swift */; };
 		F34CB9C62B344A2300F8EF83 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F34CB9C52B344A2300F8EF83 /* SceneDelegate.swift */; };
 		F34CB9CE2B344A2300F8EF83 /* CountriesListApp.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = F34CB9CC2B344A2300F8EF83 /* CountriesListApp.xcdatamodeld */; };
@@ -46,6 +49,9 @@
 		F321B0DC2B518819009E416C /* CountryDescriptionTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryDescriptionTableViewCell.swift; sourceTree = "<group>"; };
 		F321B0DD2B518819009E416C /* CountryDescriptionTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CountryDescriptionTableViewCell.xib; sourceTree = "<group>"; };
 		F321B0E02B518A0B009E416C /* PresenterCountryInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresenterCountryInfo.swift; sourceTree = "<group>"; };
+		F321B0E32B543CEE009E416C /* ModelCountryInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelCountryInfo.swift; sourceTree = "<group>"; };
+		F321B0E52B548975009E416C /* PresenterCountryInfoProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresenterCountryInfoProtocol.swift; sourceTree = "<group>"; };
+		F321B0E72B5489AB009E416C /* CountryInfoViewControllerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryInfoViewControllerProtocol.swift; sourceTree = "<group>"; };
 		F34CB9C02B344A2300F8EF83 /* CountriesListApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CountriesListApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F34CB9C32B344A2300F8EF83 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F34CB9C52B344A2300F8EF83 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -82,6 +88,7 @@
 		F321B0CB2B518562009E416C /* CountryInfo */ = {
 			isa = PBXGroup;
 			children = (
+				F321B0E22B543CD4009E416C /* Model */,
 				F321B0CD2B51858F009E416C /* Presenter */,
 				F321B0CC2B518587009E416C /* View */,
 			);
@@ -101,6 +108,7 @@
 			isa = PBXGroup;
 			children = (
 				F321B0E02B518A0B009E416C /* PresenterCountryInfo.swift */,
+				F321B0E52B548975009E416C /* PresenterCountryInfoProtocol.swift */,
 			);
 			path = Presenter;
 			sourceTree = "<group>";
@@ -108,6 +116,7 @@
 		F321B0CE2B5185A6009E416C /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
+				F321B0E72B5489AB009E416C /* CountryInfoViewControllerProtocol.swift */,
 				F321B0D02B5185E6009E416C /* CountryInfoViewController.swift */,
 				F321B0D12B5185E6009E416C /* CountryInfoViewController.xib */,
 			);
@@ -125,6 +134,14 @@
 				F321B0DD2B518819009E416C /* CountryDescriptionTableViewCell.xib */,
 			);
 			path = Cells;
+			sourceTree = "<group>";
+		};
+		F321B0E22B543CD4009E416C /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				F321B0E32B543CEE009E416C /* ModelCountryInfo.swift */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 		F34CB9B72B344A2300F8EF83 = {
@@ -350,6 +367,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				F371A7182B4854C800ADB163 /* CoutriesListProtocol.swift in Sources */,
+				F321B0E62B548975009E416C /* PresenterCountryInfoProtocol.swift in Sources */,
+				F321B0E42B543CEE009E416C /* ModelCountryInfo.swift in Sources */,
 				F34CB9E42B344C3D00F8EF83 /* CountriesListPresenter.swift in Sources */,
 				F34CB9E02B344C0C00F8EF83 /* CountriesListModel.swift in Sources */,
 				F321B0D62B51873E009E416C /* CountryInfoCollectionViewCell.swift in Sources */,
@@ -362,6 +381,7 @@
 				F34CB9E22B344C1D00F8EF83 /* CountriesListViewController.swift in Sources */,
 				F371A71B2B48552A00ADB163 /* PresenterProtocol.swift in Sources */,
 				F321B0D22B5185E6009E416C /* CountryInfoViewController.swift in Sources */,
+				F321B0E82B5489AB009E416C /* CountryInfoViewControllerProtocol.swift in Sources */,
 				F34CB9E62B344C5100F8EF83 /* DataLoader.swift in Sources */,
 				F34CB9C42B344A2300F8EF83 /* AppDelegate.swift in Sources */,
 				F371A7142B48541D00ADB163 /* Errors.swift in Sources */,

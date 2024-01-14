@@ -28,6 +28,7 @@ final class CountriesListViewController: UIViewController {
         super.viewDidLoad()
         presenter?.view = self
         presenter?.getData()
+        navigationItem.title = "Страны"
         view.addSubview(tableView)
     }
     
@@ -74,7 +75,7 @@ extension CountriesListViewController: UITableViewDataSource, UITableViewDelegat
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let selectedCountry = countries[indexPath.row]
             
-            let countryInfoVC = CountryInfoViewController(nibName: "CountryInfoViewController", bundle: nil)
+        let countryInfoVC = CountryInfoViewController(nibName: Id.countryInfoViewController, bundle: nil)
         countryInfoVC.presenter = CountryInfoPresenter(country: selectedCountry)
             
             navigationController?.pushViewController(countryInfoVC, animated: true)

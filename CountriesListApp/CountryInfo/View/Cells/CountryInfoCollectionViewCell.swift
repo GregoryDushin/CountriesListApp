@@ -7,18 +7,17 @@
 
 import UIKit
 
-class CountryInfoCollectionViewCell: UICollectionViewCell {
-    @IBOutlet var countryImage: UIImageView!
+final class CountryInfoCollectionViewCell: UICollectionViewCell {
+    @IBOutlet private var countryImage: UIImageView!
     
     private var imageLoader: ImageLoader?
     private var imageURL: String?
-
+    
     func configure(with country: Country, imageLoader: ImageLoader, indexPath: Int) {
         if country.countryInfo.images.isEmpty {
             imageURL = country.countryInfo.flag
         } else {
             imageURL = country.countryInfo.images[indexPath]
-            print("not_empty")
         }
         
         self.imageLoader = imageLoader
@@ -36,14 +35,12 @@ class CountryInfoCollectionViewCell: UICollectionViewCell {
                 DispatchQueue.main.async {
                     if self.imageURL == imageURL {
                         self.countryImage.image = image
-                        print("done!!")
                     }
                 }
             case .failure(let error):
-
+                
                 print("Failed to load image: \(error.localizedDescription)")
             }
         }
     }
-
 }

@@ -8,19 +8,8 @@
 import Foundation
 import UIKit
 
-protocol CountryInfoProtocol: AnyObject {
-    func success(data: Country)
-    func failure(error: Error)
-}
-
-protocol CountryInfoPresenterProtocol: AnyObject {
-    func getData()
-    var view: CountryInfoProtocol? { get set }
-}
-
 final class CountryInfoPresenter: CountryInfoPresenterProtocol {
     var view: CountryInfoProtocol?
-    
     var countryInfo: Country
     
     init(country: Country) {
@@ -28,6 +17,19 @@ final class CountryInfoPresenter: CountryInfoPresenterProtocol {
     }
     
     func getData() {
-        self.view?.success(data: countryInfo)
+        let capitalInfo = CountryInfoModel(
+            image: CountryInfoImg.capital!,
+            labelFixed: CountryInfoConstants.capital,
+            labelText: countryInfo.capital)
+        let populationInfo = CountryInfoModel(
+            image: CountryInfoImg.population!,
+            labelFixed: CountryInfoConstants.population,
+            labelText: String(countryInfo.population))
+        let continentInfo = CountryInfoModel(
+            image: CountryInfoImg.continent!,
+            labelFixed: CountryInfoConstants.continent,
+            labelText: countryInfo.continent)
+        
+        self.view?.success(data: [capitalInfo, populationInfo, continentInfo], data2: countryInfo)
     }
 }

@@ -10,23 +10,23 @@ import Foundation
 final class DataLoader: DataLoadable {
     private let decoder = JSONDecoder()
     private let session = URLSession.shared
-
+    
     init() {
         decoder.keyDecodingStrategy = .convertFromSnakeCase
     }
-
+    
     func loadData<ResultType: Decodable>(from url: String, responseType: ResultType.Type, completion: @escaping (Result<ResultType, Error>) -> Void) {
         guard let url = URL(string: url) else {
             completion(.failure(LoaderError.unsuppotedURL))
             return
         }
-
+        
         let task = session.dataTask(with: url) { data, _, error in
-            guard let data = data else {
+            guard let data else {
                 completion(.failure(error ?? LoaderError.networkRequestFailed))
                 return
             }
-
+            
             do {
                 let item = try self.decoder.decode(responseType, from: data)
                 completion(.success(item))
@@ -34,7 +34,7 @@ final class DataLoader: DataLoadable {
                 completion(.failure(error))
             }
         }
-
+        
         task.resume()
     }
 }

@@ -7,7 +7,10 @@
 
 import UIKit
 
-class CountryDescriptionTableViewCell: UITableViewCell {
-    @IBOutlet var descriptionLabel: UILabel!
+final class CountryDescriptionTableViewCell: UITableViewCell {
+    @IBOutlet private var descriptionLabel: UILabel!
     
+    func configure(description: String) {
+        descriptionLabel.text = description
+    }
 }
