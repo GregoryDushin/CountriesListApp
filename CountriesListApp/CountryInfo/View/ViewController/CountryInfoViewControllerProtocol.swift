@@ -8,6 +8,5 @@
 import Foundation
 
 protocol CountryInfoProtocol: AnyObject {
-    func success(data: [CountryInfoModel], data2: Country )
-    func failure(error: Error)
+    func present()
 }

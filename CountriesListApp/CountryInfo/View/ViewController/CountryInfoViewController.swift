@@ -13,29 +13,36 @@ final class CountryInfoViewController: UIViewController {
     @IBOutlet private var collectionView: UICollectionView!
     
     var presenter: CountryInfoPresenter?
-    var country: Country?
-    var countryModel: [CountryInfoModel] = []
+    private var country: Country?
+    private var countryInfoArray: [CountryInfoModel] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        configureNavBar()
         presenter?.view = self
         presenter?.getData()
-        
+        configureTableView()
+        configureCollectionView()
+    }
+    
+    private func configureNavBar() {
+        self.navigationController?.navigationBar.tintColor = .white
+    }
+    
+    private func configureTableView() {
         tableView.register(UINib(nibName: Id.countryInfoTableViewCell, bundle: nil), forCellReuseIdentifier: Id.countryInfoTableViewCell)
         tableView.register(UINib(nibName: Id.countryDescriptionTableViewCell, bundle: nil), forCellReuseIdentifier: Id.countryDescriptionTableViewCell)
+        tableView.register(UINib(nibName: Id.countryInfoTitleTableViewCell, bundle: nil), forCellReuseIdentifier: Id.countryInfoTitleTableViewCell)
         tableView.dataSource = self
         tableView.delegate = self
-        
+    }
+    
+    private func configureCollectionView() {
         collectionView.register(UINib(nibName: Id.countryInfoCollectionViewCell, bundle: nil), forCellWithReuseIdentifier: Id.countryInfoCollectionViewCell)
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.isPagingEnabled = true
-    }
-    
-    private func showAlert(_ error: String) {
-        let alert = UIAlertController(title: "Error", message: error, preferredStyle: .alert)
-        present(alert, animated: true)
     }
 }
 
@@ -43,17 +50,19 @@ final class CountryInfoViewController: UIViewController {
 
 extension CountryInfoViewController: CountryInfoProtocol {
     
-    func success(data: [CountryInfoModel], data2: Country) {
-        self.countryModel = data
-        self.country = data2
-        self.pageControl.numberOfPages = data2.countryInfo.images.count
-        self.pageControl.currentPage = 0
-        self.tableView.reloadData()
-        self.collectionView.reloadData()
-    }
-    
-    func failure(error: Error) {
-        showAlert(error.localizedDescription)
+    func present() {
+        if let presenter {
+            if let countryInfoArray = presenter.countryInfoArray {
+                self.countryInfoArray = countryInfoArray
+                self.country = presenter.country
+                let imageCount = presenter.country.countryInfo.images.count
+                pageControl.numberOfPages = imageCount
+                pageControl.currentPage = 0
+                tableView.reloadData()
+                collectionView.reloadData()
+                pageControl.isHidden = imageCount == 1
+            }
+        }
     }
 }
 
@@ -61,63 +70,73 @@ extension CountryInfoViewController: CountryInfoProtocol {
 
 extension CountryInfoViewController: UITableViewDataSource, UITableViewDelegate {
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
+        3
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return (section == 0) ? countryModel.count : 1
+        switch section {
+        case 0:
+            return 1
+        case 1:
+            return countryInfoArray.count
+        case 2:
+            return 1
+        default:
+            return 0
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
         if indexPath.section == 0 {
+            
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: Id.countryInfoTitleTableViewCell, for: indexPath) as? CountryInfoTitleTableViewCell else {
+                return UITableViewCell()
+            }
+            
+            if let country {
+                cell.configure(header: country.name)
+            }
+            
+            return cell
+        } else if indexPath.section == 1 {
+            
             guard let cell = tableView.dequeueReusableCell(withIdentifier: Id.countryInfoTableViewCell, for: indexPath) as? CountryInfoTableViewCell else {
                 return UITableViewCell()
             }
             
-            let cellInfo = countryModel[indexPath.row]
+            let cellInfo = countryInfoArray[indexPath.row]
             cell.configure(
                 constantText: cellInfo.labelFixed,
                 infoText: cellInfo.labelText,
-                image: cellInfo.image)
+                image: cellInfo.image
+            )
             
             return cell
-        } else {
             
+        } else {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: Id.countryDescriptionTableViewCell, for: indexPath) as? CountryDescriptionTableViewCell else {
                 return UITableViewCell()
             }
-            
-            cell.configure(description: country?.description ?? "description")
+    
+            if let country {
+                cell.configure(description: country.description)
+            }
             
             return cell
         }
     }
     
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let headerView = UIView()
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         
-        let headerLabel = UILabel(frame: CGRect(x: 15, y: 5, width: tableView.frame.width - 30, height: 20))
-        headerLabel.textColor = UIColor.black
-        headerLabel.font = UIFont.boldSystemFont(ofSize: (section == 0) ? 20 : 17)
-        headerLabel.text = (section == 0) ? country?.name : "О стране"
-        
-        headerView.addSubview(headerLabel)
-        headerView.backgroundColor = UIColor.clear
-        
-        return headerView
-    }
-    
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return (section == 0) ? 50 : 30
-    }
-    
-    func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
-        if let headerView = view as? UITableViewHeaderFooterView {
-            headerView.contentView.backgroundColor = UIColor.clear
-            headerView.backgroundView?.backgroundColor = UIColor.clear
+        if indexPath.section == 0 && indexPath.row == 0 {
+            cell.separatorInset = UIEdgeInsets(top: 0, left: tableView.bounds.size.width, bottom: 0, right: 0)
+        } else {
+            cell.separatorInset = UIEdgeInsets.zero
         }
     }
 }
+
 
 // MARK: - UICollectionViewDataSource
 
@@ -134,9 +153,9 @@ extension CountryInfoViewController: UICollectionViewDataSource, UICollectionVie
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Id.countryInfoCollectionViewCell, for: indexPath) as? CountryInfoCollectionViewCell else {
             return UICollectionViewCell()
         }
-        
-        cell.configure(with: country!, imageLoader: ImageLoader(), indexPath: indexPath.row)
-        
+        if let country {
+            cell.configure(with: country, imageLoader: ImageLoader(), indexPath: indexPath.row)
+        }
         return cell
     }
 }
@@ -145,9 +164,7 @@ extension CountryInfoViewController: UICollectionViewDataSource, UICollectionVie
 
 extension CountryInfoViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width = collectionView.frame.width
-        let height = collectionView.frame.height
-        return CGSize(width: width, height: height)
+        return CGSize(width: collectionView.frame.width, height: collectionView.frame.height)
     }
 }
 
@@ -155,16 +172,12 @@ extension CountryInfoViewController: UICollectionViewDelegateFlowLayout {
 
 extension CountryInfoViewController: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if scrollView == collectionView {
-            let pageIndex = round(scrollView.contentOffset.x / scrollView.frame.width)
-            pageControl.currentPage = Int(pageIndex)
-        }
+        let pageIndex = round(scrollView.contentOffset.x / scrollView.frame.width)
+        pageControl.currentPage = Int(pageIndex)
     }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        if scrollView == collectionView {
-            let pageIndex = round(scrollView.contentOffset.x / scrollView.frame.width)
-            pageControl.currentPage = Int(pageIndex)
-        }
+        let pageIndex = round(scrollView.contentOffset.x / scrollView.frame.width)
+        pageControl.currentPage = Int(pageIndex)
     }
 }

@@ -10,6 +10,7 @@ import UIKit
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
+    var coordinator: Coordinator?
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
     
@@ -17,21 +18,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         let window = UIWindow(windowScene: windowScene)
         
-        let initialViewController = ViewControllerFactory.countriesVC()
-        
-        let navigationController = UINavigationController(rootViewController: initialViewController)
+        let navigationController = UINavigationController()
+        coordinator = CountriesListCoordinator(navigationController: navigationController)
+        coordinator?.start()
         
         window.rootViewController = navigationController
         window.makeKeyAndVisible()
         self.window = window
-    }
-}
-
-struct ViewControllerFactory {
-    static func countriesVC() -> CountriesListViewController {
-        let initialViewController = CountriesListViewController()
-        initialViewController.presenter = CountriesListPresenter(dataLoader: DataLoader())
-        return initialViewController
-                                    
     }
 }

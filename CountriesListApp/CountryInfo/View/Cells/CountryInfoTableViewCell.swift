@@ -7,13 +7,15 @@
 
 import UIKit
 
- final class CountryInfoTableViewCell: UITableViewCell {
+final class CountryInfoTableViewCell: UITableViewCell {
     @IBOutlet private var imageInfo: UIImageView!
     @IBOutlet private var constantLabel: UILabel!
     @IBOutlet private var infoLabel: UILabel!
     
     func configure(constantText: String, infoText: String, image: UIImage) {
-        imageInfo.image = image
+        let templateImage = image.withRenderingMode(.alwaysTemplate)
+        imageInfo.image = templateImage
+        imageInfo.tintColor = UIColor.orange
         constantLabel.text = constantText
         infoLabel.text = infoText
     }

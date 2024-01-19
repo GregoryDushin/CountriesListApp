@@ -10,10 +10,10 @@ import UIKit
 
 final class CountriesListViewController: UIViewController {
     
-    var presenter: CountriesListPresenterProtocol?
-    
-    private var imgs: [UIImage] = []
+    var presenter: CountriesListPresenter?
+    weak var coordinatorDelegate: CountriesListCoordinator?
     private var countries: [Country] = []
+    
     
     private lazy var tableView: UITableView = {
         let tableView = UITableView(frame: view.bounds, style: .plain)
@@ -28,29 +28,31 @@ final class CountriesListViewController: UIViewController {
         super.viewDidLoad()
         presenter?.view = self
         presenter?.getData()
-        navigationItem.title = "Страны"
+        navigationItem.title = L10n.countriesScreenNavigationItemTitle
         view.addSubview(tableView)
-    }
-    
-    private func showAlert(_ error: String) {
-        let alert = UIAlertController(title: "Error", message: error, preferredStyle: .alert)
-        present(alert, animated: true)
     }
 }
 
 // MARK: - CountriesListProtocol
 
 extension CountriesListViewController: CountriesListProtocol {
-    func success(data: [Country], img: [UIImage]) {
-        countries = data
-        imgs = img
-        DispatchQueue.main.async {
-            self.tableView.reloadData()
+    
+    func success() {
+        if let presenter {
+            if let presenterCountries = presenter.countries {
+                self.countries = presenterCountries
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
+            }
         }
     }
-    
-    func failure(error: Error) {
-        showAlert(error.localizedDescription)
+    func failure() {
+        if let presenter {
+            if let presenterError = presenter.error{
+                Utils.showAlert(on: self, message: presenterError)
+            }
+        }
     }
 }
 
@@ -66,20 +68,16 @@ extension CountriesListViewController: UITableViewDataSource, UITableViewDelegat
         guard let cell = tableView.dequeueReusableCell(withIdentifier: Id.customTableViewCell, for: indexPath) as? CustomTableViewCell else {
             return UITableViewCell()
         }
-
+        
         let country = countries[indexPath.row]
         cell.configure(with: country, imageLoader: ImageLoader())
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let selectedCountry = countries[indexPath.row]
-            
-        let countryInfoVC = CountryInfoViewController(nibName: Id.countryInfoViewController, bundle: nil)
-        countryInfoVC.presenter = CountryInfoPresenter(country: selectedCountry)
-            
-            navigationController?.pushViewController(countryInfoVC, animated: true)
-        
         tableView.deselectRow(at: indexPath, animated: true)
+        
+        let selectedCountry = countries[indexPath.row]
+        coordinatorDelegate?.didSelectCountry(selectedCountry)
     }
 }

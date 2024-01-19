@@ -9,6 +9,6 @@ import UIKit
 import Foundation
 
 protocol CountriesListProtocol: AnyObject {
-    func success(data: [Country], img: [UIImage])
-    func failure(error: Error)
+    func success()
+    func failure()
 }

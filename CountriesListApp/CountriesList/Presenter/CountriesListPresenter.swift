@@ -8,29 +8,28 @@
 import Foundation
 import UIKit
 
-final class CountriesListPresenter: CountriesListPresenterProtocol {
+class CountriesListPresenter: CountriesListPresenterProtocol {
     
     weak var view: CountriesListProtocol?
     private let dataLoader: DataLoader
+    var countries: [Country]?
+    var error: String?
     
     init(dataLoader: DataLoader) {
         self.dataLoader = dataLoader
     }
     
     func getData() {
-        dataLoader.loadData(from: Url.newCountriesUrl, responseType: CountryResponse.self) { [weak self] result in
+        dataLoader.loadData(from: Url.countriesUrl, responseType: CountryResponse.self) { [weak self] result in
             guard let self = self else { return }
-            
-            var countries: [Country] = []
-            
             switch result {
             case .success(let data):
-                countries = data.countries
+                self.countries = data.countries
+                self.view?.success()
             case .failure(let error):
-                self.view?.failure(error: error)
+                self.error = error.localizedDescription
+                self.view?.failure()
             }
-            
-            self.view?.success(data: countries, img: [])
         }
     }
 }

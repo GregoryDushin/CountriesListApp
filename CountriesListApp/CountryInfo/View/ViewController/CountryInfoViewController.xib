@@ -21,10 +21,12 @@
             <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="FMn-1z-em8">
+                <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFit" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="FMn-1z-em8">
                     <rect key="frame" x="0.0" y="0.0" width="393" height="400"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="400" id="4oy-Vm-zXj"/>
+                    </constraints>
                     <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="l6D-7E-fhS">
                         <size key="itemSize" width="128" height="128"/>
                         <size key="headerReferenceSize" width="0.0" height="0.0"/>
@@ -32,18 +34,27 @@
                         <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                     </collectionViewFlowLayout>
                 </collectionView>
-                <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="1NJ-KT-cP4">
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="1NJ-KT-cP4">
                     <rect key="frame" x="0.0" y="400" width="393" height="452"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                 </tableView>
-                <pageControl opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="3" translatesAutoresizingMaskIntoConstraints="NO" id="I2J-Tk-VqG">
-                    <rect key="frame" x="139" y="187" width="115.66666666666666" height="26"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="3" translatesAutoresizingMaskIntoConstraints="NO" id="I2J-Tk-VqG">
+                    <rect key="frame" x="138.66666666666666" y="349" width="115.66666666666666" height="26"/>
                 </pageControl>
             </subviews>
             <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+            <constraints>
+                <constraint firstItem="FMn-1z-em8" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="7nL-LP-cVj"/>
+                <constraint firstItem="I2J-Tk-VqG" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="HsT-yh-PId"/>
+                <constraint firstAttribute="trailing" secondItem="1NJ-KT-cP4" secondAttribute="trailing" id="PhM-kn-kHK"/>
+                <constraint firstAttribute="bottom" secondItem="1NJ-KT-cP4" secondAttribute="bottom" id="Q2b-s1-e1g"/>
+                <constraint firstItem="1NJ-KT-cP4" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="SDO-Wy-OL1"/>
+                <constraint firstItem="FMn-1z-em8" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="cPO-SK-GJT"/>
+                <constraint firstAttribute="trailing" secondItem="FMn-1z-em8" secondAttribute="trailing" id="lO5-O7-9Zh"/>
+                <constraint firstItem="1NJ-KT-cP4" firstAttribute="top" secondItem="I2J-Tk-VqG" secondAttribute="bottom" constant="25" id="lSM-rI-LD6"/>
+                <constraint firstItem="1NJ-KT-cP4" firstAttribute="top" secondItem="FMn-1z-em8" secondAttribute="bottom" id="yZN-UT-YL5"/>
+            </constraints>
             <point key="canvasLocation" x="136.64122137404578" y="19.718309859154932"/>
         </view>
     </objects>

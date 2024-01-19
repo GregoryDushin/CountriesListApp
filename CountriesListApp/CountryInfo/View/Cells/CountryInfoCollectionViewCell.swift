@@ -38,8 +38,7 @@ final class CountryInfoCollectionViewCell: UICollectionViewCell {
                     }
                 }
             case .failure(let error):
-                
-                print("Failed to load image: \(error.localizedDescription)")
+                Utils.showAlert(on: CountryInfoViewController(), message: error.localizedDescription)
             }
         }
     }
