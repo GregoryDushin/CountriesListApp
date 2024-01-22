@@ -12,6 +12,13 @@ enum Url {
     static let countriesUrl = "https://gist.githubusercontent.com/goob0176/4d3056dffc2a18f693cdad8ccc88507e/raw/8e7409cfc35bdb946e2aa93ff44035a8f504bbc3/page_1.json"
 }
 
+enum rawsAndSectionsCountryInfoTableView {
+    static let numbersOfSection = 3
+    static let rawsInCarouselSection = 1
+    static let rawsInInfoBlockSection = 1
+    static let defaultRaws = 0
+}
+
 enum Id {
     static let customTableViewCell = String(describing: CustomTableViewCell.self)
     static let countryInfoCollectionViewCell = String(describing: CountryInfoCollectionViewCell.self)
@@ -28,11 +35,10 @@ enum CountryInfoImg {
 }
 
 struct L10n {
-    // Countries List
     static let countriesScreenNavigationItemTitle = NSLocalizedString("Страны", comment: "")
-    // Country Info
     static let countryCapital = NSLocalizedString("Столица", comment: "")
     static let countryPopulation = NSLocalizedString("Популяция", comment: "")
     static let countryContinent = NSLocalizedString("Континент", comment: "")
     static let countryThirdSectionTitle = NSLocalizedString("О стране", comment: "")
 }
+

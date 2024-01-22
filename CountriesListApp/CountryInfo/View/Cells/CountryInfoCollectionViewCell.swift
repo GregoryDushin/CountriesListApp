@@ -13,11 +13,16 @@ final class CountryInfoCollectionViewCell: UICollectionViewCell {
     private var imageLoader: ImageLoader?
     private var imageURL: String?
     
-    func configure(with country: Country, imageLoader: ImageLoader, indexPath: Int) {
+    func configure(with country: Country?, imageLoader: ImageLoader, index: Int) {
+
+        guard let country else {
+            return
+        }
+
         if country.countryInfo.images.isEmpty {
             imageURL = country.countryInfo.flag
         } else {
-            imageURL = country.countryInfo.images[indexPath]
+            imageURL = country.countryInfo.images[index]
         }
         
         self.imageLoader = imageLoader
@@ -37,8 +42,8 @@ final class CountryInfoCollectionViewCell: UICollectionViewCell {
                         self.countryImage.image = image
                     }
                 }
-            case .failure(let error):
-                Utils.showAlert(on: CountryInfoViewController(), message: error.localizedDescription)
+            case .failure(_):
+                self.countryImage.image = UIImage()
             }
         }
     }

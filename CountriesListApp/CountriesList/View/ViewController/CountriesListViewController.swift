@@ -12,8 +12,6 @@ final class CountriesListViewController: UIViewController {
     
     var presenter: CountriesListPresenter?
     weak var coordinatorDelegate: CountriesListCoordinator?
-    private var countries: [Country] = []
-    
     
     private lazy var tableView: UITableView = {
         let tableView = UITableView(frame: view.bounds, style: .plain)
@@ -38,20 +36,14 @@ final class CountriesListViewController: UIViewController {
 extension CountriesListViewController: CountriesListProtocol {
     
     func success() {
-        if let presenter {
-            if let presenterCountries = presenter.countries {
-                self.countries = presenterCountries
-                DispatchQueue.main.async {
-                    self.tableView.reloadData()
-                }
-            }
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
         }
     }
+
     func failure() {
-        if let presenter {
-            if let presenterError = presenter.error{
-                Utils.showAlert(on: self, message: presenterError)
-            }
+        if let presenter = presenter , let presenterError = presenter.error {
+            Utils.showAlert(on: self, message: presenterError)
         }
     }
 }
@@ -61,7 +53,9 @@ extension CountriesListViewController: CountriesListProtocol {
 extension CountriesListViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return countries.count
+        if let presenter = presenter, let countries = presenter.countries {
+            return countries.count
+        } else { return 0 }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -69,15 +63,19 @@ extension CountriesListViewController: UITableViewDataSource, UITableViewDelegat
             return UITableViewCell()
         }
         
-        let country = countries[indexPath.row]
-        cell.configure(with: country, imageLoader: ImageLoader())
-        return cell
+        if let presenter = presenter, let countries = presenter.countries {
+            let country = countries[indexPath.row]
+            cell.configure(with: country, imageLoader: ImageLoader())
+            return cell
+        } else { return UITableViewCell() }
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        let selectedCountry = countries[indexPath.row]
-        coordinatorDelegate?.didSelectCountry(selectedCountry)
+        if let presenter = presenter, let countries = presenter.countries {
+            let selectedCountry = countries[indexPath.row]
+            coordinatorDelegate?.didSelectCountry(selectedCountry)
+        }
     }
 }

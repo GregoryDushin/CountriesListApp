@@ -13,8 +13,6 @@ final class CountryInfoViewController: UIViewController {
     @IBOutlet private var collectionView: UICollectionView!
     
     var presenter: CountryInfoPresenter?
-    private var country: Country?
-    private var countryInfoArray: [CountryInfoModel] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -51,17 +49,12 @@ final class CountryInfoViewController: UIViewController {
 extension CountryInfoViewController: CountryInfoProtocol {
     
     func present() {
-        if let presenter {
-            if let countryInfoArray = presenter.countryInfoArray {
-                self.countryInfoArray = countryInfoArray
-                self.country = presenter.country
-                let imageCount = presenter.country.countryInfo.images.count
-                pageControl.numberOfPages = imageCount
-                pageControl.currentPage = 0
-                tableView.reloadData()
-                collectionView.reloadData()
-                pageControl.isHidden = imageCount == 1
-            }
+        if let presenter = presenter {
+            pageControl.numberOfPages = presenter.country.countryInfo.images.count
+            pageControl.currentPage = 0
+            tableView.reloadData()
+            collectionView.reloadData()
+            pageControl.isHidden = presenter.country.countryInfo.images.count == 1
         }
     }
 }
@@ -70,57 +63,64 @@ extension CountryInfoViewController: CountryInfoProtocol {
 
 extension CountryInfoViewController: UITableViewDataSource, UITableViewDelegate {
     func numberOfSections(in tableView: UITableView) -> Int {
-        3
+        rawsAndSectionsCountryInfoTableView.numbersOfSection
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
         case 0:
-            return 1
+            return rawsAndSectionsCountryInfoTableView.rawsInCarouselSection
         case 1:
-            return countryInfoArray.count
+            if let presenter = presenter, let countryArray = presenter.countryInfoArray {
+                return countryArray.count
+            } else {
+                return 0
+            }
         case 2:
-            return 1
+            return rawsAndSectionsCountryInfoTableView.rawsInInfoBlockSection
         default:
-            return 0
+            return rawsAndSectionsCountryInfoTableView.defaultRaws
         }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        if indexPath.section == 0 {
-            
+        switch indexPath.section {
+        case 0:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: Id.countryInfoTitleTableViewCell, for: indexPath) as? CountryInfoTitleTableViewCell else {
                 return UITableViewCell()
             }
             
-            if let country {
-                cell.configure(header: country.name)
+            if let presenter = presenter {
+                cell.configure(header: presenter.country.name)
             }
             
             return cell
-        } else if indexPath.section == 1 {
             
+        case 1:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: Id.countryInfoTableViewCell, for: indexPath) as? CountryInfoTableViewCell else {
                 return UITableViewCell()
             }
             
-            let cellInfo = countryInfoArray[indexPath.row]
-            cell.configure(
-                constantText: cellInfo.labelFixed,
-                infoText: cellInfo.labelText,
-                image: cellInfo.image
-            )
+            if let presenter = presenter, let countryInfoArray = presenter.countryInfoArray {
+                let cellInfo = countryInfoArray[indexPath.row]
+                cell.configure(
+                    constantText: cellInfo.labelFixed,
+                    infoText: cellInfo.labelText,
+                    image: cellInfo.image
+                )
+                
+                return cell
+            } else {
+                return UITableViewCell()
+            }
             
-            return cell
-            
-        } else {
+        default:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: Id.countryDescriptionTableViewCell, for: indexPath) as? CountryDescriptionTableViewCell else {
                 return UITableViewCell()
             }
-    
-            if let country {
-                cell.configure(description: country.description)
+            
+            if let presenter = presenter {
+                cell.configure(description: presenter.country.description)
             }
             
             return cell
@@ -141,8 +141,9 @@ extension CountryInfoViewController: UITableViewDataSource, UITableViewDelegate 
 // MARK: - UICollectionViewDataSource
 
 extension CountryInfoViewController: UICollectionViewDataSource, UICollectionViewDelegate {
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if let imageCount = country?.countryInfo.images.count, imageCount > 0 {
+        if let imageCount = presenter?.country.countryInfo.images.count, imageCount > 0 {
             return imageCount
         } else {
             return 1
@@ -153,10 +154,11 @@ extension CountryInfoViewController: UICollectionViewDataSource, UICollectionVie
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Id.countryInfoCollectionViewCell, for: indexPath) as? CountryInfoCollectionViewCell else {
             return UICollectionViewCell()
         }
-        if let country {
-            cell.configure(with: country, imageLoader: ImageLoader(), indexPath: indexPath.row)
+        if let presenter{
+            cell.configure(with: presenter.country, imageLoader: ImageLoader(), index: indexPath.row)
         }
         return cell
+        
     }
 }
 
