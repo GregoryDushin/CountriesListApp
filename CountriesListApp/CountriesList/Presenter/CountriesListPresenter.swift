@@ -5,8 +5,8 @@
 //  Created by Григорий Душин on 21.12.2023.
 //
 
-import Foundation
 import UIKit
+import CoreData
 
 class CountriesListPresenter: CountriesListPresenterProtocol {
     
@@ -25,6 +25,7 @@ class CountriesListPresenter: CountriesListPresenterProtocol {
             switch result {
             case .success(let data):
                 self.countries = data.countries
+                self.saveCountriesToCoreData()
                 self.view?.success()
             case .failure(let error):
                 self.error = error.localizedDescription
@@ -32,4 +33,20 @@ class CountriesListPresenter: CountriesListPresenterProtocol {
             }
         }
     }
-}
+
+    private func saveCountriesToCoreData() {
+            guard let countries = countries else { return }
+            
+            for country in countries {
+                CoreDataManager.shared.saveCountry(
+                    name: country.name,
+                    continent: country.continent,
+                    capital: country.capital,
+                    population: Int64(country.population),
+                    descriptionSmall: country.descriptionSmall,
+                    descriptionFull: country.description
+                )
+            }
+        }
+    }
+
