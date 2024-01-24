@@ -189,15 +189,15 @@
 		F34CB9C22B344A2300F8EF83 /* CountriesListApp */ = {
 			isa = PBXGroup;
 			children = (
-				F3E05CC82B5FFD26006ED22F /* CoreData */,
 				F321B0CB2B518562009E416C /* CountryInfo */,
 				F34CB9DE2B344BDF00F8EF83 /* CountriesList */,
+				F3E05CC82B5FFD26006ED22F /* CoreData */,
 				F34CB9DD2B344BCF00F8EF83 /* Networking */,
 				F371A7272B4856CB00ADB163 /* Errors */,
 				F34CB9E72B344C9A00F8EF83 /* Constants */,
-				F371A7282B485B4600ADB163 /* DelegateCoordinators */,
 				F371A7292B485B5E00ADB163 /* Resources */,
 				F321B0F12B5ADE23009E416C /* Coordinator */,
+				F371A7282B485B4600ADB163 /* DelegateCoordinators */,
 				F34CB9D42B344A2400F8EF83 /* Info.plist */,
 				F321B0ED2B582706009E416C /* Utils.swift */,
 				F321B0EF2B588515009E416C /* ViewControllerFactory.swift */,

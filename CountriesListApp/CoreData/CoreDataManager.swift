@@ -14,39 +14,44 @@ public final class CoreDataManager: NSObject {
     public static let shared = CoreDataManager()
     private override init() {}
     
-    private var appDelrgate: AppDelegate {
+    private var appDelegate: AppDelegate {
         UIApplication.shared.delegate as! AppDelegate
     }
     
     private var context: NSManagedObjectContext {
-        var result: NSManagedObjectContext?
-        DispatchQueue.main.sync {
-            result = appDelrgate.persistentContainer.viewContext
-        }
-        guard let unwrappedResult = result else {
-            fatalError("Unable to obtain NSManagedObjectContext")
-        }
-        return unwrappedResult
+        appDelegate.persistentContainer.viewContext
     }
 }
 
 public extension CoreDataManager {
     
-    func saveCountry(name: String, continent: String, capital: String, population: Int64, descriptionSmall: String, descriptionFull: String) {
-        guard let entityDescription = NSEntityDescription.entity(forEntityName: "CountryPersistance", in: context) else {
-            return
-        }
-        let entity = CountryPersistance(entity: entityDescription, insertInto: context)
-        entity.name = name
-        entity.continent = continent
-        entity.capital = capital
-        entity.population = population
-        entity.descriptionSmall = descriptionSmall
-        entity.descriptionFull = descriptionFull
+    func saveCountry(name: String, continent: String, capital: String, population: Int64, descriptionSmall: String, descriptionFull: String, images: [String], flag: String) {
+        let fetchRequest: NSFetchRequest<CountryPersistance> = CountryPersistance.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: L10n.formatFetchRequest, name)
         
         do {
+            let existingCountries = try context.fetch(fetchRequest)
+            if let existingCountry = existingCountries.first {
+                existingCountry.continent = continent
+                existingCountry.capital = capital
+                existingCountry.population = population
+                existingCountry.descriptionSmall = descriptionSmall
+                existingCountry.descriptionFull = descriptionFull
+                existingCountry.flag = flag
+                existingCountry.images = images
+            } else {
+                let entity = CountryPersistance(entity: CountryPersistance.entity(), insertInto: context)
+                entity.name = name
+                entity.continent = continent
+                entity.capital = capital
+                entity.population = population
+                entity.descriptionSmall = descriptionSmall
+                entity.descriptionFull = descriptionFull
+                entity.flag = flag
+                entity.images = images
+            }
+            
             try context.save()
-            print(context)
         } catch {
             print("Error saving country: \(error)")
         }
@@ -61,5 +66,30 @@ public extension CoreDataManager {
             return []
         }
     }
+    
+    func hasSavedCountries() -> Bool {
+        let fetchRequest: NSFetchRequest<CountryPersistance> = CountryPersistance.fetchRequest()
+        
+        do {
+            let countries = try context.fetch(fetchRequest)
+            return !countries.isEmpty
+        } catch {
+            print("Error checking for saved countries: \(error)")
+            return false
+        }
+    }
+    
+    func clearData() {
+        
+        let fetchRequest: NSFetchRequest<NSFetchRequestResult> = CountryPersistance.fetchRequest()
+        let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
+        
+        do {
+            try context.execute(deleteRequest)
+        } catch {
+            print("Error clearing Core Data: \(error)")
+        }
+    }
 }
+
 

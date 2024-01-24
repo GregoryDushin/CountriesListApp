@@ -24,10 +24,34 @@ final class CountriesListViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        createClearButton()
         presenter?.view = self
         presenter?.getData()
         navigationItem.title = L10n.countriesScreenNavigationItemTitle
         view.addSubview(tableView)
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        updateClearButtonStyle()
+    }
+    
+    private func updateClearButtonStyle() {
+        self.navigationController?.navigationBar.tintColor = .black
+    }
+    
+    private func createClearButton() {
+        let clearButton = UIBarButtonItem(
+            title: L10n.clearButtonTitle,
+            style: .plain, 
+            target: self,
+            action: #selector(clearButtonTapped)
+        )
+        navigationItem.rightBarButtonItem = clearButton
+    }
+    
+    @objc private func clearButtonTapped() {
+        presenter?.clearMemory()
     }
 }
 
@@ -40,7 +64,7 @@ extension CountriesListViewController: CountriesListProtocol {
             self.tableView.reloadData()
         }
     }
-
+    
     func failure() {
         if let presenter = presenter , let presenterError = presenter.error {
             Utils.showAlert(on: self, message: presenterError)

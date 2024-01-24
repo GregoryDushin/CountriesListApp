@@ -20,6 +20,25 @@ class CountriesListPresenter: CountriesListPresenterProtocol {
     }
     
     func getData() {
+        if CoreDataManager.shared.hasSavedCountries() {
+            loadSavedCountries()
+        } else {
+            loadDataFromNetwork()
+        }
+    }
+    
+    func clearMemory() {
+        ImageLoader().clearCache()
+        CoreDataManager.shared.clearData()
+    }
+    
+    private func loadSavedCountries() {
+        let savedCountries = CoreDataManager.shared.fetchAllCountries()
+        self.countries = mapToCountryModel(savedCountries)
+        self.view?.success()
+    }
+    
+    private func loadDataFromNetwork() {
         dataLoader.loadData(from: Url.countriesUrl, responseType: CountryResponse.self) { [weak self] result in
             guard let self = self else { return }
             switch result {
@@ -33,20 +52,39 @@ class CountriesListPresenter: CountriesListPresenterProtocol {
             }
         }
     }
-
+    
     private func saveCountriesToCoreData() {
-            guard let countries = countries else { return }
-            
-            for country in countries {
-                CoreDataManager.shared.saveCountry(
-                    name: country.name,
-                    continent: country.continent,
-                    capital: country.capital,
-                    population: Int64(country.population),
-                    descriptionSmall: country.descriptionSmall,
-                    descriptionFull: country.description
-                )
-            }
+        guard let countries = countries else { return }
+        
+        for country in countries {
+            CoreDataManager.shared.saveCountry(
+                name: country.name,
+                continent: country.continent,
+                capital: country.capital,
+                population: Int64(country.population),
+                descriptionSmall: country.descriptionSmall,
+                descriptionFull: country.description,
+                images: country.countryInfo.images,
+                flag: country.countryInfo.flag
+            )
         }
     }
-
+    
+    private func mapToCountryModel(_ countries: [CountryPersistance]) -> [Country] {
+        return countries.map { countryPersistance in
+            Country(
+                name: countryPersistance.name,
+                continent: countryPersistance.continent,
+                capital: countryPersistance.capital,
+                population: Int(countryPersistance.population),
+                descriptionSmall: countryPersistance.descriptionSmall,
+                description: countryPersistance.descriptionFull,
+                image: nil,
+                countryInfo: CountryInfo(
+                    images: countryPersistance.images,
+                    flag: countryPersistance.flag
+                )
+            )
+        }
+    }
+}

@@ -40,5 +40,8 @@ struct L10n {
     static let countryPopulation = NSLocalizedString("Популяция", comment: "")
     static let countryContinent = NSLocalizedString("Континент", comment: "")
     static let countryThirdSectionTitle = NSLocalizedString("О стране", comment: "")
+    static let clearButtonTitle = NSLocalizedString("Очистить", comment: "")
+    static let formatFetchRequest = NSLocalizedString("name == %@", comment: "")
+    static let fetchRequestEntityName = NSLocalizedString("CountryPersistance", comment: "")
 }
 

@@ -43,7 +43,9 @@ final class CountryInfoCollectionViewCell: UICollectionViewCell {
                     }
                 }
             case .failure(_):
-                self.countryImage.image = UIImage()
+                DispatchQueue.main.async {
+                    self.countryImage.image = UIImage()
+                }
             }
         }
     }
