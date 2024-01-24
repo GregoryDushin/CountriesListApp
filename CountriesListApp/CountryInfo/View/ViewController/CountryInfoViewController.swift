@@ -68,16 +68,16 @@ extension CountryInfoViewController: UITableViewDataSource, UITableViewDelegate 
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
-        case 0:
-            return rawsAndSectionsCountryInfoTableView.rawsInCarouselSection
-        case 1:
+        case rawsAndSectionsCountryInfoTableView.headerSection:
+            return rawsAndSectionsCountryInfoTableView.rawsInHeaderlSection
+        case rawsAndSectionsCountryInfoTableView.infoBlockSection:
             if let presenter = presenter, let countryArray = presenter.countryInfoArray {
                 return countryArray.count
             } else {
                 return 0
             }
-        case 2:
-            return rawsAndSectionsCountryInfoTableView.rawsInInfoBlockSection
+        case rawsAndSectionsCountryInfoTableView.descriptionSection:
+            return rawsAndSectionsCountryInfoTableView.rawsInDescriptionSection
         default:
             return rawsAndSectionsCountryInfoTableView.defaultRaws
         }
@@ -85,7 +85,7 @@ extension CountryInfoViewController: UITableViewDataSource, UITableViewDelegate 
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch indexPath.section {
-        case 0:
+        case rawsAndSectionsCountryInfoTableView.headerSection:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: Id.countryInfoTitleTableViewCell, for: indexPath) as? CountryInfoTitleTableViewCell else {
                 return UITableViewCell()
             }
@@ -96,7 +96,7 @@ extension CountryInfoViewController: UITableViewDataSource, UITableViewDelegate 
             
             return cell
             
-        case 1:
+        case rawsAndSectionsCountryInfoTableView.infoBlockSection:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: Id.countryInfoTableViewCell, for: indexPath) as? CountryInfoTableViewCell else {
                 return UITableViewCell()
             }

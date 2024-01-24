@@ -14,9 +14,12 @@ enum Url {
 
 enum rawsAndSectionsCountryInfoTableView {
     static let numbersOfSection = 3
-    static let rawsInCarouselSection = 1
-    static let rawsInInfoBlockSection = 1
+    static let rawsInHeaderlSection = 1
+    static let rawsInDescriptionSection = 1
     static let defaultRaws = 0
+    static let headerSection = 0
+    static let infoBlockSection = 1
+    static let descriptionSection = 2
 }
 
 enum Id {
