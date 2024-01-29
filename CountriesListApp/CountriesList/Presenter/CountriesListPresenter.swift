@@ -10,8 +10,13 @@ import CoreData
 
 class CountriesListPresenter: CountriesListPresenterProtocol {
     
+    private struct Constants {
+        static let countriesUrl = "https://gist.githubusercontent.com/goob0176/4d3056dffc2a18f693cdad8ccc88507e/raw/8e7409cfc35bdb946e2aa93ff44035a8f504bbc3/page_1.json"
+    }
+    
     weak var view: CountriesListProtocol?
     private let dataLoader: DataLoader
+    private let coreDataManager = CoreDataManager.shared
     var countries: [Country]?
     var error: String?
     
@@ -20,7 +25,7 @@ class CountriesListPresenter: CountriesListPresenterProtocol {
     }
     
     func getData() {
-        if CoreDataManager.shared.hasSavedCountries() {
+        if coreDataManager.hasSavedCountries() {
             loadSavedCountries()
         } else {
             loadDataFromNetwork()
@@ -29,17 +34,17 @@ class CountriesListPresenter: CountriesListPresenterProtocol {
     
     func clearMemory() {
         ImageLoader().clearCache()
-        CoreDataManager.shared.clearData()
+        coreDataManager.clearData()
     }
     
     private func loadSavedCountries() {
-        let savedCountries = CoreDataManager.shared.fetchAllCountries()
-        self.countries = mapToCountryModel(savedCountries)
-        self.view?.success()
+        let savedCountries = coreDataManager.fetchAllCountries()
+        countries = mapToCountryModel(savedCountries)
+        view?.success()
     }
     
     private func loadDataFromNetwork() {
-        dataLoader.loadData(from: Url.countriesUrl, responseType: CountryResponse.self) { [weak self] result in
+        dataLoader.loadData(from: Constants.countriesUrl, responseType: CountryResponse.self) { [weak self] result in
             guard let self = self else { return }
             switch result {
             case .success(let data):
@@ -56,22 +61,13 @@ class CountriesListPresenter: CountriesListPresenterProtocol {
     private func saveCountriesToCoreData() {
         guard let countries = countries else { return }
         
-        for country in countries {
-            CoreDataManager.shared.saveCountry(
-                name: country.name,
-                continent: country.continent,
-                capital: country.capital,
-                population: Int64(country.population),
-                descriptionSmall: country.descriptionSmall,
-                descriptionFull: country.description,
-                images: country.countryInfo.images,
-                flag: country.countryInfo.flag
-            )
+        countries.forEach { country in
+            coreDataManager.saveCountry(from: country)
         }
     }
     
-    private func mapToCountryModel(_ countries: [CountryPersistance]) -> [Country] {
-        return countries.map { countryPersistance in
+    private func mapToCountryModel(_ countries: [CountryPersistanceObject]) -> [Country] {
+        countries.map { countryPersistance in
             Country(
                 name: countryPersistance.name,
                 continent: countryPersistance.continent,

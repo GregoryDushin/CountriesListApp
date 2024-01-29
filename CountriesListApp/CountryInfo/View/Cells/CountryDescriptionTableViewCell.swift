@@ -8,11 +8,16 @@
 import UIKit
 
 final class CountryDescriptionTableViewCell: UITableViewCell {
+    
+    private struct Constants {
+        static let countryThirdSectionTitle = "О стране"
+    }
+    
     @IBOutlet private var descriptionLabel: UILabel!
     @IBOutlet private var aboutLabel: UILabel!
     
     func configure(description: String) {
         descriptionLabel.text = description
-        aboutLabel.text = L10n.countryThirdSectionTitle
+        aboutLabel.text = Constants.countryThirdSectionTitle
     }
 }

@@ -8,47 +8,45 @@
 import UIKit
 import CoreData
 
-// MARK: - CRUD
-
-public final class CoreDataManager: NSObject {
-    public static let shared = CoreDataManager()
-    private override init() {}
+public final class CoreDataManager {
     
-    private var appDelegate: AppDelegate {
-        UIApplication.shared.delegate as! AppDelegate
+    private struct Constants {
+        static let formatFetchRequest = "name == %@"
+        static let persistentContainerName = "CountriesListApp"
     }
+    
+    public static let shared = CoreDataManager()
+    private init() {}
     
     private var context: NSManagedObjectContext {
-        appDelegate.persistentContainer.viewContext
+        persistentContainer.viewContext
     }
-}
-
-public extension CoreDataManager {
     
-    func saveCountry(name: String, continent: String, capital: String, population: Int64, descriptionSmall: String, descriptionFull: String, images: [String], flag: String) {
-        let fetchRequest: NSFetchRequest<CountryPersistance> = CountryPersistance.fetchRequest()
-        fetchRequest.predicate = NSPredicate(format: L10n.formatFetchRequest, name)
+    private lazy var persistentContainer: NSPersistentContainer = {
+        let container = NSPersistentContainer(name: Constants.persistentContainerName)
+        container.loadPersistentStores(completionHandler: { (storeDescription, error) in
+            if let error = error as NSError? {
+                fatalError("Unresolved error \(error), \(error.userInfo)")
+            }
+        })
+        return container
+    }()
+    
+    private var countryFetchRequest: NSFetchRequest<NSFetchRequestResult> {
+        let fetchRequest: NSFetchRequest<CountryPersistanceObject> = CountryPersistanceObject.fetchRequest()
+        return fetchRequest as! NSFetchRequest<NSFetchRequestResult>
+    }
+    
+    func saveCountry(from serverModel: Country) {
+        countryFetchRequest.predicate = NSPredicate(format: Constants.formatFetchRequest, serverModel.name)
         
         do {
-            let existingCountries = try context.fetch(fetchRequest)
-            if let existingCountry = existingCountries.first {
-                existingCountry.continent = continent
-                existingCountry.capital = capital
-                existingCountry.population = population
-                existingCountry.descriptionSmall = descriptionSmall
-                existingCountry.descriptionFull = descriptionFull
-                existingCountry.flag = flag
-                existingCountry.images = images
+            let existingCountries = try context.fetch(countryFetchRequest)
+            if let existingCountry = existingCountries.first as? CountryPersistanceObject {
+                CountryPersistanceObject.update(existingCountry, with: serverModel)
             } else {
-                let entity = CountryPersistance(entity: CountryPersistance.entity(), insertInto: context)
-                entity.name = name
-                entity.continent = continent
-                entity.capital = capital
-                entity.population = population
-                entity.descriptionSmall = descriptionSmall
-                entity.descriptionFull = descriptionFull
-                entity.flag = flag
-                entity.images = images
+                let countryEntity = CountryPersistanceObject.create(from: serverModel, in: context)
+                context.insert(countryEntity)
             }
             
             try context.save()
@@ -57,10 +55,9 @@ public extension CoreDataManager {
         }
     }
     
-    func fetchAllCountries() -> [CountryPersistance] {
-        let fetchRequest: NSFetchRequest<CountryPersistance> = CountryPersistance.fetchRequest()
+    func fetchAllCountries() -> [CountryPersistanceObject] {
         do {
-            return try context.fetch(fetchRequest)
+            return try context.fetch(countryFetchRequest) as! [CountryPersistanceObject]
         } catch {
             print("Error fetching countries: \(error)")
             return []
@@ -68,10 +65,8 @@ public extension CoreDataManager {
     }
     
     func hasSavedCountries() -> Bool {
-        let fetchRequest: NSFetchRequest<CountryPersistance> = CountryPersistance.fetchRequest()
-        
         do {
-            let countries = try context.fetch(fetchRequest)
+            let countries = try context.fetch(countryFetchRequest) as! [CountryPersistanceObject]
             return !countries.isEmpty
         } catch {
             print("Error checking for saved countries: \(error)")
@@ -80,16 +75,11 @@ public extension CoreDataManager {
     }
     
     func clearData() {
-        
-        let fetchRequest: NSFetchRequest<NSFetchRequestResult> = CountryPersistance.fetchRequest()
-        let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
-        
         do {
-            try context.execute(deleteRequest)
+            try context.execute(NSBatchDeleteRequest(fetchRequest: countryFetchRequest))
         } catch {
             print("Error clearing Core Data: \(error)")
         }
     }
 }
-
 

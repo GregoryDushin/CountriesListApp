@@ -10,17 +10,30 @@ import UIKit
 
 final class CountriesListViewController: UIViewController {
     
+    private struct Constants {
+        struct Id {
+            static let customTableViewCell = String(describing: CustomTableViewCell.self)
+        }
+
+        struct UI {
+            static let countriesScreenNavigationItemTitle = "Страны"
+            static let clearButtonTitle = "Очистить"
+        }
+    }
+    
     var presenter: CountriesListPresenter?
     weak var coordinatorDelegate: CountriesListCoordinator?
     
     private lazy var tableView: UITableView = {
         let tableView = UITableView(frame: view.bounds, style: .plain)
         tableView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        tableView.register(UINib(nibName: Id.customTableViewCell, bundle: nil), forCellReuseIdentifier: Id.customTableViewCell)
+        tableView.register(UINib(nibName: Constants.Id.customTableViewCell, bundle: nil), forCellReuseIdentifier: Constants.Id.customTableViewCell)
         tableView.dataSource = self
         tableView.delegate = self
         return tableView
     }()
+
+ // MARK: - lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,7 +41,7 @@ final class CountriesListViewController: UIViewController {
         createClearButton()
         presenter?.view = self
         presenter?.getData()
-        navigationItem.title = L10n.countriesScreenNavigationItemTitle
+        navigationItem.title = Constants.UI.countriesScreenNavigationItemTitle
         view.addSubview(tableView)
     }
     
@@ -36,14 +49,16 @@ final class CountriesListViewController: UIViewController {
         updateClearButtonStyle()
     }
     
+    // MARK: - UI Actions
+    
     private func updateClearButtonStyle() {
-        self.navigationController?.navigationBar.tintColor = .black
+        navigationController?.navigationBar.tintColor = .black
     }
     
     private func createClearButton() {
         let clearButton = UIBarButtonItem(
-            title: L10n.clearButtonTitle,
-            style: .plain, 
+            title: Constants.UI.clearButtonTitle,
+            style: .plain,
             target: self,
             action: #selector(clearButtonTapped)
         )
@@ -66,7 +81,7 @@ extension CountriesListViewController: CountriesListProtocol {
     }
     
     func failure() {
-        if let presenter = presenter , let presenterError = presenter.error {
+        if let presenter, let presenterError = presenter.error {
             Utils.showAlert(on: self, message: presenterError)
         }
     }
@@ -77,19 +92,19 @@ extension CountriesListViewController: CountriesListProtocol {
 extension CountriesListViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if let presenter = presenter, let countries = presenter.countries {
+        if let presenter, let countries = presenter.countries {
             return countries.count
         } else { return 0 }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: Id.customTableViewCell, for: indexPath) as? CustomTableViewCell else {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: Constants.Id.customTableViewCell, for: indexPath) as? CustomTableViewCell else {
             return UITableViewCell()
         }
         
-        if let presenter = presenter, let countries = presenter.countries {
+        if let presenter, let countries = presenter.countries {
             let country = countries[indexPath.row]
-            cell.configure(with: country, imageLoader: ImageLoader())
+            cell.configure(with: country)
             return cell
         } else { return UITableViewCell() }
     }
@@ -97,7 +112,7 @@ extension CountriesListViewController: UITableViewDataSource, UITableViewDelegat
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        if let presenter = presenter, let countries = presenter.countries {
+        if let presenter, let countries = presenter.countries {
             let selectedCountry = countries[indexPath.row]
             coordinatorDelegate?.didSelectCountry(selectedCountry)
         }

@@ -9,11 +9,13 @@ import Foundation
 import UIKit
 
 final class ImageLoader: ImageLoadable {
+    
     private let session = URLSession.shared
-    private let imageCache = NSCache<NSString, UIImage>()
+    private static let imageCache = NSCache<NSString, UIImage>()
     
     func loadImage(from url: String, completion: @escaping (Result<UIImage, Error>) -> Void) {
-        if let cachedImage = imageCache.object(forKey: url as NSString) {
+        
+        if let cachedImage = ImageLoader.imageCache.object(forKey: url as NSString) {
             completion(.success(cachedImage))
             return
         }
@@ -23,24 +25,24 @@ final class ImageLoader: ImageLoadable {
             return
         }
         
-        let task = session.dataTask(with: imageURL) { [weak self] data, _, error in
-            guard let self else { return }
+        let task = session.dataTask(with: imageURL) { data, _, error in
             guard let data else {
                 completion(.failure(error ?? LoaderError.networkRequestFailed))
                 return
             }
             
             if let image = UIImage(data: data) {
-                self.imageCache.setObject(image, forKey: url as NSString)
+                ImageLoader.imageCache.setObject(image, forKey: url as NSString)
                 completion(.success(image))
             } else {
                 completion(.failure(LoaderError.invalidImageData))
             }
         }
+
         task.resume()
     }
     
     func clearCache() {
-        imageCache.removeAllObjects()
+        ImageLoader.imageCache.removeAllObjects()
     }
 }

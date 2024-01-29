@@ -8,11 +8,33 @@
 import UIKit
 
 final class CountryInfoViewController: UIViewController {
+    
+    private struct Constants {
+        struct Id {
+            static let countryDescriptionTableViewCell = String(describing: CountryDescriptionTableViewCell.self)
+            static let countryInfoTableViewCell = String(describing: CountryInfoTableViewCell.self)
+            static let countryInfoTitleTableViewCell = String(describing: CountryInfoTitleTableViewCell.self)
+            static let countryInfoCollectionViewCell = String(describing: CountryInfoCollectionViewCell.self)
+        }
+        
+        struct RawsAndSectionsCountryInfoTableView {
+            static let numbersOfSection = 3
+            static let rawsInHeaderlSection = 1
+            static let rawsInDescriptionSection = 1
+            static let defaultRaws = 0
+            static let headerSection = 0
+            static let infoBlockSection = 1
+            static let descriptionSection = 2
+        }
+    }
+    
     @IBOutlet private var pageControl: UIPageControl!
     @IBOutlet private var tableView: UITableView!
     @IBOutlet private var collectionView: UICollectionView!
     
     var presenter: CountryInfoPresenter?
+    
+// MARK: - lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,20 +46,22 @@ final class CountryInfoViewController: UIViewController {
         configureCollectionView()
     }
     
+// MARK: - UI Actions
+    
     private func configureNavBar() {
         self.navigationController?.navigationBar.tintColor = .white
     }
     
     private func configureTableView() {
-        tableView.register(UINib(nibName: Id.countryInfoTableViewCell, bundle: nil), forCellReuseIdentifier: Id.countryInfoTableViewCell)
-        tableView.register(UINib(nibName: Id.countryDescriptionTableViewCell, bundle: nil), forCellReuseIdentifier: Id.countryDescriptionTableViewCell)
-        tableView.register(UINib(nibName: Id.countryInfoTitleTableViewCell, bundle: nil), forCellReuseIdentifier: Id.countryInfoTitleTableViewCell)
+        tableView.register(UINib(nibName: Constants.Id.countryInfoTableViewCell, bundle: nil), forCellReuseIdentifier: Constants.Id.countryInfoTableViewCell)
+        tableView.register(UINib(nibName: Constants.Id.countryDescriptionTableViewCell, bundle: nil), forCellReuseIdentifier: Constants.Id.countryDescriptionTableViewCell)
+        tableView.register(UINib(nibName: Constants.Id.countryInfoTitleTableViewCell, bundle: nil), forCellReuseIdentifier: Constants.Id.countryInfoTitleTableViewCell)
         tableView.dataSource = self
         tableView.delegate = self
     }
     
     private func configureCollectionView() {
-        collectionView.register(UINib(nibName: Id.countryInfoCollectionViewCell, bundle: nil), forCellWithReuseIdentifier: Id.countryInfoCollectionViewCell)
+        collectionView.register(UINib(nibName: Constants.Id.countryInfoCollectionViewCell, bundle: nil), forCellWithReuseIdentifier: Constants.Id.countryInfoCollectionViewCell)
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.isPagingEnabled = true
@@ -49,7 +73,7 @@ final class CountryInfoViewController: UIViewController {
 extension CountryInfoViewController: CountryInfoProtocol {
     
     func present() {
-        if let presenter = presenter {
+        if let presenter {
             pageControl.numberOfPages = presenter.country.countryInfo.images.count
             pageControl.currentPage = 0
             tableView.reloadData()
@@ -63,30 +87,30 @@ extension CountryInfoViewController: CountryInfoProtocol {
 
 extension CountryInfoViewController: UITableViewDataSource, UITableViewDelegate {
     func numberOfSections(in tableView: UITableView) -> Int {
-        rawsAndSectionsCountryInfoTableView.numbersOfSection
+        Constants.RawsAndSectionsCountryInfoTableView.numbersOfSection
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
-        case rawsAndSectionsCountryInfoTableView.headerSection:
-            return rawsAndSectionsCountryInfoTableView.rawsInHeaderlSection
-        case rawsAndSectionsCountryInfoTableView.infoBlockSection:
-            if let presenter = presenter, let countryArray = presenter.countryInfoArray {
+        case Constants.RawsAndSectionsCountryInfoTableView.headerSection:
+            return Constants.RawsAndSectionsCountryInfoTableView.rawsInHeaderlSection
+        case Constants.RawsAndSectionsCountryInfoTableView.infoBlockSection:
+            if let presenter, let countryArray = presenter.countryInfoArray {
                 return countryArray.count
             } else {
                 return 0
             }
-        case rawsAndSectionsCountryInfoTableView.descriptionSection:
-            return rawsAndSectionsCountryInfoTableView.rawsInDescriptionSection
+        case Constants.RawsAndSectionsCountryInfoTableView.descriptionSection:
+            return Constants.RawsAndSectionsCountryInfoTableView.rawsInDescriptionSection
         default:
-            return rawsAndSectionsCountryInfoTableView.defaultRaws
+            return Constants.RawsAndSectionsCountryInfoTableView.defaultRaws
         }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch indexPath.section {
-        case rawsAndSectionsCountryInfoTableView.headerSection:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: Id.countryInfoTitleTableViewCell, for: indexPath) as? CountryInfoTitleTableViewCell else {
+        case Constants.RawsAndSectionsCountryInfoTableView.headerSection:
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: Constants.Id.countryInfoTitleTableViewCell, for: indexPath) as? CountryInfoTitleTableViewCell else {
                 return UITableViewCell()
             }
             
@@ -96,12 +120,12 @@ extension CountryInfoViewController: UITableViewDataSource, UITableViewDelegate 
             
             return cell
             
-        case rawsAndSectionsCountryInfoTableView.infoBlockSection:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: Id.countryInfoTableViewCell, for: indexPath) as? CountryInfoTableViewCell else {
+        case Constants.RawsAndSectionsCountryInfoTableView.infoBlockSection:
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: Constants.Id.countryInfoTableViewCell, for: indexPath) as? CountryInfoTableViewCell else {
                 return UITableViewCell()
             }
             
-            if let presenter = presenter, let countryInfoArray = presenter.countryInfoArray {
+            if let presenter, let countryInfoArray = presenter.countryInfoArray {
                 let cellInfo = countryInfoArray[indexPath.row]
                 cell.configure(
                     constantText: cellInfo.labelFixed,
@@ -115,11 +139,11 @@ extension CountryInfoViewController: UITableViewDataSource, UITableViewDelegate 
             }
             
         default:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: Id.countryDescriptionTableViewCell, for: indexPath) as? CountryDescriptionTableViewCell else {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: Constants.Id.countryDescriptionTableViewCell, for: indexPath) as? CountryDescriptionTableViewCell else {
                 return UITableViewCell()
             }
             
-            if let presenter = presenter {
+            if let presenter {
                 cell.configure(description: presenter.country.description)
             }
             
@@ -151,14 +175,15 @@ extension CountryInfoViewController: UICollectionViewDataSource, UICollectionVie
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Id.countryInfoCollectionViewCell, for: indexPath) as? CountryInfoCollectionViewCell else {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.Id.countryInfoCollectionViewCell, for: indexPath) as? CountryInfoCollectionViewCell else {
             return UICollectionViewCell()
         }
-        if let presenter{
-            cell.configure(with: presenter.country, imageLoader: ImageLoader(), index: indexPath.row)
-        }
-        return cell
         
+        if let presenter {
+            cell.configure(with: presenter.country, index: indexPath.row)
+        }
+        
+        return cell
     }
 }
 
