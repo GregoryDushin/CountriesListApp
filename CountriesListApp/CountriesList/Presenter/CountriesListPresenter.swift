@@ -45,7 +45,7 @@ class CountriesListPresenter: CountriesListPresenterProtocol {
     
     private func loadDataFromNetwork() {
         dataLoader.loadData(from: Constants.countriesUrl, responseType: CountryResponse.self) { [weak self] result in
-            guard let self = self else { return }
+            guard let self else { return }
             switch result {
             case .success(let data):
                 self.countries = data.countries
@@ -59,7 +59,7 @@ class CountriesListPresenter: CountriesListPresenterProtocol {
     }
     
     private func saveCountriesToCoreData() {
-        guard let countries = countries else { return }
+        guard let countries else { return }
         
         countries.forEach { country in
             coreDataManager.saveCountry(from: country)
