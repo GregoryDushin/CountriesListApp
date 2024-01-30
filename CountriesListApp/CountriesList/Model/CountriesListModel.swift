@@ -21,6 +21,22 @@ struct Country: Decodable {
     let description: String
     let image: String?
     let countryInfo: CountryInfo
+    
+    static func mapToCountryModel(_ countryPersistance: CountryPersistanceObject) -> Country {
+        return Country(
+            name: countryPersistance.name,
+            continent: countryPersistance.continent,
+            capital: countryPersistance.capital,
+            population: Int(countryPersistance.population),
+            descriptionSmall: countryPersistance.descriptionSmall,
+            description: countryPersistance.descriptionFull,
+            image: nil,
+            countryInfo: CountryInfo(
+                images: countryPersistance.images,
+                flag: countryPersistance.flag
+            )
+        )
+    }
 }
 
 struct CountryInfo: Decodable {

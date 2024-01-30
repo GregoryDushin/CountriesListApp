@@ -9,13 +9,18 @@ import Foundation
 
 
 struct ViewControllerFactory {
+    
+    private struct Constants {
+        static let countryInfoViewController = String(describing: CountryInfoViewController.self)
+    }
+    
     static func createCountriesVC() -> CountriesListViewController {
         let countriesViewController = CountriesListViewController()
         countriesViewController.presenter = CountriesListPresenter(dataLoader: DataLoader())
         return countriesViewController
     }
     static func createCountryInfoVC(country: Country) -> CountryInfoViewController {
-        let countryInfoViewController = CountryInfoViewController(nibName: Id.countryInfoViewController, bundle: nil)
+        let countryInfoViewController = CountryInfoViewController(nibName: Constants.countryInfoViewController, bundle: nil)
         countryInfoViewController.presenter = CountryInfoPresenter(country: country)
         return countryInfoViewController
     }

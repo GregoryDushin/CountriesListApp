@@ -10,10 +10,10 @@ import UIKit
 final class CountryInfoCollectionViewCell: UICollectionViewCell {
     @IBOutlet private var countryImage: UIImageView!
     
-    private var imageLoader: ImageLoader?
+    private var imageLoader = ImageLoader()
     private var imageURL: String?
     
-    func configure(with country: Country?, imageLoader: ImageLoader, index: Int) {
+    func configure(with country: Country?, index: Int) {
 
         guard let country else {
             return
@@ -24,13 +24,11 @@ final class CountryInfoCollectionViewCell: UICollectionViewCell {
         } else {
             imageURL = country.countryInfo.images[index]
         }
-        
-        self.imageLoader = imageLoader
         loadImage()
     }
     
     private func loadImage() {
-        guard let imageURL, let imageLoader else { return }
+        guard let imageURL else { return }
         
         imageLoader.loadImage(from: imageURL) { [weak self] result in
             guard let self = self else { return }
@@ -43,7 +41,9 @@ final class CountryInfoCollectionViewCell: UICollectionViewCell {
                     }
                 }
             case .failure(_):
-                self.countryImage.image = UIImage()
+                DispatchQueue.main.async {
+                    self.countryImage.image = UIImage()
+                }
             }
         }
     }
