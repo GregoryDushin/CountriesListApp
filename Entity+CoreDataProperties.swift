@@ -10,7 +10,7 @@ import Foundation
 import CoreData
 
 @objc(CountryPersistanceObject)
-public class CountryPersistanceObject: NSManagedObject {
+final public class CountryPersistanceObject: NSManagedObject {
     
     private struct Constants {
         static let fetchRequestEntityName = "CountryPersistanceObject"

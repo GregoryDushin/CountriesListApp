@@ -8,11 +8,12 @@
 import UIKit
 import CoreData
 
-public final class CoreDataManager {
+final class CoreDataManager {
     
     private struct Constants {
         static let formatFetchRequest = "name == %@"
         static let persistentContainerName = "CountriesListApp"
+        static let fetchRequestEntityName = "CountryPersistanceObject"
     }
     
     public static let shared = CoreDataManager()
@@ -33,40 +34,48 @@ public final class CoreDataManager {
     }()
     
     private var countryFetchRequest: NSFetchRequest<NSFetchRequestResult> {
-        let fetchRequest: NSFetchRequest<CountryPersistanceObject> = CountryPersistanceObject.fetchRequest()
-        return fetchRequest as! NSFetchRequest<NSFetchRequestResult>
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: Constants.fetchRequestEntityName)
+        return fetchRequest
     }
     
     func saveCountry(from serverModel: Country) {
-        countryFetchRequest.predicate = NSPredicate(format: Constants.formatFetchRequest, serverModel.name)
-        
+        let fetchRequest: NSFetchRequest<CountryPersistanceObject> = CountryPersistanceObject.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "name == %@", serverModel.name)
+
         do {
-            let existingCountries = try context.fetch(countryFetchRequest)
-            if let existingCountry = existingCountries.first as? CountryPersistanceObject {
+            let existingCountries = try context.fetch(fetchRequest)
+
+            if let existingCountry = existingCountries.first {
                 CountryPersistanceObject.update(existingCountry, with: serverModel)
             } else {
                 let countryEntity = CountryPersistanceObject.create(from: serverModel, in: context)
                 context.insert(countryEntity)
             }
-            
+
             try context.save()
         } catch {
             print("Error saving country: \(error)")
         }
     }
     
+
+    
     func fetchAllCountries() -> [CountryPersistanceObject] {
         do {
-            return try context.fetch(countryFetchRequest) as! [CountryPersistanceObject]
+            if let countries = try context.fetch(countryFetchRequest) as? [CountryPersistanceObject] {
+                return countries
+            } else {
+                return []
+            }
         } catch {
             print("Error fetching countries: \(error)")
             return []
         }
     }
-    
+
     func hasSavedCountries() -> Bool {
         do {
-            let countries = try context.fetch(countryFetchRequest) as! [CountryPersistanceObject]
+            let countries = try context.fetch(countryFetchRequest) as? [CountryPersistanceObject] ?? []
             return !countries.isEmpty
         } catch {
             print("Error checking for saved countries: \(error)")

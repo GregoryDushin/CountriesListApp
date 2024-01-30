@@ -11,10 +11,10 @@ import UIKit
 final class ImageLoader: ImageLoadable {
     
     private let session = URLSession.shared
-    private static let imageCache = NSCache<NSString, UIImage>()
+
+    public static var imageCache = NSCache<NSString, UIImage>()
     
     func loadImage(from url: String, completion: @escaping (Result<UIImage, Error>) -> Void) {
-        
         if let cachedImage = ImageLoader.imageCache.object(forKey: url as NSString) {
             completion(.success(cachedImage))
             return
@@ -41,8 +41,8 @@ final class ImageLoader: ImageLoadable {
 
         task.resume()
     }
-    
-    func clearCache() {
+
+    public static func clearCache() {
         ImageLoader.imageCache.removeAllObjects()
     }
 }

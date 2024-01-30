@@ -8,7 +8,7 @@
 import UIKit
 import CoreData
 
-class CountriesListPresenter: CountriesListPresenterProtocol {
+final class CountriesListPresenter: CountriesListPresenterProtocol {
     
     private struct Constants {
         static let countriesUrl = "https://gist.githubusercontent.com/goob0176/4d3056dffc2a18f693cdad8ccc88507e/raw/8e7409cfc35bdb946e2aa93ff44035a8f504bbc3/page_1.json"
@@ -33,7 +33,7 @@ class CountriesListPresenter: CountriesListPresenterProtocol {
     }
     
     func clearMemory() {
-        ImageLoader().clearCache()
+        ImageLoader.clearCache()
         coreDataManager.clearData()
     }
     
@@ -60,27 +60,12 @@ class CountriesListPresenter: CountriesListPresenterProtocol {
     
     private func saveCountriesToCoreData() {
         guard let countries else { return }
-        
         countries.forEach { country in
             coreDataManager.saveCountry(from: country)
         }
     }
     
     private func mapToCountryModel(_ countries: [CountryPersistanceObject]) -> [Country] {
-        countries.map { countryPersistance in
-            Country(
-                name: countryPersistance.name,
-                continent: countryPersistance.continent,
-                capital: countryPersistance.capital,
-                population: Int(countryPersistance.population),
-                descriptionSmall: countryPersistance.descriptionSmall,
-                description: countryPersistance.descriptionFull,
-                image: nil,
-                countryInfo: CountryInfo(
-                    images: countryPersistance.images,
-                    flag: countryPersistance.flag
-                )
-            )
-        }
+        countries.map { Country.mapToCountryModel($0) }
     }
 }
