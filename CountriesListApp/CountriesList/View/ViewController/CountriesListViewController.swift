@@ -14,13 +14,14 @@ final class CountriesListViewController: UIViewController {
         struct Id {
             static let customTableViewCell = String(describing: CustomTableViewCell.self)
         }
-
+        
         struct UI {
             static let countriesScreenNavigationItemTitle = "Страны"
             static let clearButtonTitle = "Очистить"
         }
     }
     
+    private var lastContentOffset: CGFloat = 0
     var presenter: CountriesListPresenter?
     weak var coordinatorDelegate: CountriesListCoordinator?
     
@@ -32,17 +33,24 @@ final class CountriesListViewController: UIViewController {
         tableView.delegate = self
         return tableView
     }()
-
- // MARK: - lifecycle
+    
+    var isLoadingData: Bool {
+        return presenter?.isLoadingData ?? false
+    }
+    
+    // MARK: - lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         createClearButton()
+        setupPullToRefresh()
         presenter?.view = self
         presenter?.getData()
         navigationItem.title = Constants.UI.countriesScreenNavigationItemTitle
         view.addSubview(tableView)
+        
+        tableView.delegate = self
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -68,7 +76,20 @@ final class CountriesListViewController: UIViewController {
     @objc private func clearButtonTapped() {
         presenter?.clearMemory()
     }
-}
+    
+    // MARK: - Pull to Refresh
+        
+        private func setupPullToRefresh() {
+            let refreshControl = UIRefreshControl()
+            refreshControl.addTarget(self, action: #selector(refreshData), for: .valueChanged)
+            tableView.refreshControl = refreshControl
+        }
+
+        @objc private func refreshData() {
+            presenter?.clearMemory()
+            presenter?.getData()
+        }
+    }
 
 // MARK: - CountriesListProtocol
 
@@ -116,5 +137,23 @@ extension CountriesListViewController: UITableViewDataSource, UITableViewDelegat
             let selectedCountry = countries[indexPath.row]
             coordinatorDelegate?.didSelectCountry(selectedCountry)
         }
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let contentOffsetY = scrollView.contentOffset.y
+        let scrollViewHeight = scrollView.frame.height
+        let tableViewHeight = tableView.contentSize.height
+        let scrollPosition = contentOffsetY + scrollViewHeight
+        let threshold = tableViewHeight - 200
+        
+        if scrollPosition >= threshold && contentOffsetY > lastContentOffset {
+            if let presenter = presenter, !presenter.isLoadingData {
+                presenter.isLoadingData = true
+                presenter.loadNextPage()
+                tableView.reloadData()
+            }
+        }
+        
+        lastContentOffset = contentOffsetY
     }
 }
