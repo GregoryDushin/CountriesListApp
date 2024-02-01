@@ -123,7 +123,7 @@ extension CountriesListViewController: CountriesListProtocol {
 extension CountriesListViewController: UITableViewDataSource, UITableViewDelegate {
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
+        2
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
