@@ -12,4 +12,5 @@ enum LoaderError: Error {
     case unsuppotedURL
     case invalidImageData
     case dataFailed
+    case loadNextPageFailed
 }

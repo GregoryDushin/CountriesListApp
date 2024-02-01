@@ -11,4 +11,5 @@ import Foundation
 protocol CountriesListProtocol: AnyObject {
     func success()
     func failure()
+    func showLoadingIndicator(_ show: Bool)
 }
