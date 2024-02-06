@@ -9,9 +9,10 @@ import Foundation
 
 final class DataLoader: DataLoadable {
     private let decoder = JSONDecoder()
-    private let session = URLSession.shared
+    private let session: URLSession
     
-    init() {
+    init(session: URLSession = URLSession.shared) {
+        self.session = session
         decoder.keyDecodingStrategy = .convertFromSnakeCase
     }
     
