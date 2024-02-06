@@ -43,6 +43,8 @@
 		F3E05CC52B5FF7F5006ED22F /* Entity+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3E05CC32B5FF7F5006ED22F /* Entity+CoreDataProperties.swift */; };
 		F3E05CC72B5FFD1F006ED22F /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3E05CC62B5FFD1F006ED22F /* CoreDataManager.swift */; };
 		F3E05CCB2B600FBA006ED22F /* CountriesListApp.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = F3E05CC92B600FBA006ED22F /* CountriesListApp.xcdatamodeld */; };
+		F3E05CCE2B6C4D74006ED22F /* ActivityIndicatorTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3E05CCC2B6C4D74006ED22F /* ActivityIndicatorTableViewCell.swift */; };
+		F3E05CCF2B6C4D74006ED22F /* ActivityIndicatorTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F3E05CCD2B6C4D74006ED22F /* ActivityIndicatorTableViewCell.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -84,6 +86,8 @@
 		F3E05CC32B5FF7F5006ED22F /* Entity+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Entity+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		F3E05CC62B5FFD1F006ED22F /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
 		F3E05CCA2B600FBA006ED22F /* CountriesListApp.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = CountriesListApp.xcdatamodel; sourceTree = "<group>"; };
+		F3E05CCC2B6C4D74006ED22F /* ActivityIndicatorTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityIndicatorTableViewCell.swift; sourceTree = "<group>"; };
+		F3E05CCD2B6C4D74006ED22F /* ActivityIndicatorTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ActivityIndicatorTableViewCell.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -252,6 +256,8 @@
 			children = (
 				F3A799202B39BB5D0084F48F /* CustomTableViewCell.swift */,
 				F3A799212B39BB5D0084F48F /* CustomTableViewCell.xib */,
+				F3E05CCC2B6C4D74006ED22F /* ActivityIndicatorTableViewCell.swift */,
+				F3E05CCD2B6C4D74006ED22F /* ActivityIndicatorTableViewCell.xib */,
 			);
 			path = CustomTableViewCell;
 			sourceTree = "<group>";
@@ -379,6 +385,7 @@
 				F34CB9D32B344A2400F8EF83 /* LaunchScreen.storyboard in Resources */,
 				F321B0D32B5185E6009E416C /* CountryInfoViewController.xib in Resources */,
 				F34CB9D02B344A2400F8EF83 /* Assets.xcassets in Resources */,
+				F3E05CCF2B6C4D74006ED22F /* ActivityIndicatorTableViewCell.xib in Resources */,
 				F321B0DB2B5187FA009E416C /* CountryInfoTableViewCell.xib in Resources */,
 				F321B0EC2B5811D8009E416C /* CountryInfoTitleTableViewCell.xib in Resources */,
 				F3A799232B39BB5D0084F48F /* CustomTableViewCell.xib in Resources */,
@@ -420,6 +427,7 @@
 				F3E05CC52B5FF7F5006ED22F /* Entity+CoreDataProperties.swift in Sources */,
 				F3E05CC72B5FFD1F006ED22F /* CoreDataManager.swift in Sources */,
 				F321B0E12B518A0B009E416C /* CountryInfoPresenter.swift in Sources */,
+				F3E05CCE2B6C4D74006ED22F /* ActivityIndicatorTableViewCell.swift in Sources */,
 				F34CB9C62B344A2300F8EF83 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

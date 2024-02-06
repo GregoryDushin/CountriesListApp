@@ -10,4 +10,5 @@ import Foundation
 protocol CountriesListPresenterProtocol: AnyObject {
     func getData()
     var view: CountriesListProtocol? { get set }
+    var isLoadingData: Bool { get set }
 }

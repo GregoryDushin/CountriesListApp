@@ -11,14 +11,16 @@ import CoreData
 final class CountriesListPresenter: CountriesListPresenterProtocol {
     
     private struct Constants {
-        static let countriesUrl = "https://gist.githubusercontent.com/goob0176/4d3056dffc2a18f693cdad8ccc88507e/raw/8e7409cfc35bdb946e2aa93ff44035a8f504bbc3/page_1.json"
+        static let countriesUrl = "https://gist.githubusercontent.com/goob0176/4d3056dffc2a18f693cdad8ccc88507e/raw/a29905f5352a99a5b83904ba6f40313fb41a5ca2/page_1.json"
     }
     
     weak var view: CountriesListProtocol?
     private let dataLoader: DataLoader
     private let coreDataManager = CoreDataManager.shared
+    private var nextPageUrl: String?
     var countries: [Country]?
     var error: String?
+    var isLoadingData: Bool = false
     
     init(dataLoader: DataLoader) {
         self.dataLoader = dataLoader
@@ -28,13 +30,26 @@ final class CountriesListPresenter: CountriesListPresenterProtocol {
         if coreDataManager.hasSavedCountries() {
             loadSavedCountries()
         } else {
-            loadDataFromNetwork()
+            loadDataFromNetwork(from: Constants.countriesUrl)
         }
     }
     
     func clearMemory() {
         ImageLoader.clearCache()
         coreDataManager.clearData()
+        countries = []
+    }
+    
+    func loadNextPage() {
+        guard let nextUrl = nextPageUrl else {
+            self.error = LoaderError.loadNextPageFailed.localizedDescription
+            self.view?.failure()
+            return
+        }
+        
+        self.isLoadingData = true
+        self.view?.showLoadingIndicator(true)
+        self.loadDataFromNetwork(from: nextUrl)
     }
     
     private func loadSavedCountries() {
@@ -43,17 +58,29 @@ final class CountriesListPresenter: CountriesListPresenterProtocol {
         view?.success()
     }
     
-    private func loadDataFromNetwork() {
-        dataLoader.loadData(from: Constants.countriesUrl, responseType: CountryResponse.self) { [weak self] result in
+    private func loadDataFromNetwork(from url: String) {
+        dataLoader.loadData(from: url, responseType: CountryResponse.self) { [weak self] result in
             guard let self else { return }
-            switch result {
-            case .success(let data):
-                self.countries = data.countries
-                self.saveCountriesToCoreData()
-                self.view?.success()
-            case .failure(let error):
-                self.error = error.localizedDescription
-                self.view?.failure()
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let data):
+                    self.nextPageUrl = data.next
+                    if let existingCountries = self.countries {
+                        self.isLoadingData = true
+                        self.countries = existingCountries + data.countries
+                    } else {
+                        self.isLoadingData = false
+                        self.countries = data.countries
+                    }
+                    
+                    self.saveCountriesToCoreData()
+                    self.view?.success()
+                    self.view?.showLoadingIndicator(false)
+                case .failure(let error):
+                    self.error = error.localizedDescription
+                    self.view?.failure()
+                    self.view?.showLoadingIndicator(false)
+                }
             }
         }
     }
