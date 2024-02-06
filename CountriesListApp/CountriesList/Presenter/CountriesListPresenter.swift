@@ -37,6 +37,7 @@ final class CountriesListPresenter: CountriesListPresenterProtocol {
     func clearMemory() {
         ImageLoader.clearCache()
         coreDataManager.clearData()
+        countries = []
     }
     
     func loadNextPage() {

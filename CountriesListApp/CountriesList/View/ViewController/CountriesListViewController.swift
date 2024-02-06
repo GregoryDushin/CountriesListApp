@@ -83,9 +83,6 @@ final class CountriesListViewController: UIViewController {
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(refreshData), for: .valueChanged)
         tableView.refreshControl = refreshControl
-        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(Constants.UI.setupPullToRefreshTime)) {
-            self.tableView.refreshControl?.endRefreshing()
-        }
     }
     
     @objc private func refreshData() {
@@ -101,12 +98,16 @@ extension CountriesListViewController: CountriesListProtocol {
     func success() {
         DispatchQueue.main.async {
             self.tableView.reloadData()
+            self.tableView.refreshControl?.endRefreshing()
         }
     }
     
     func failure() {
         if let presenter, let presenterError = presenter.error {
             Utils.showAlert(on: self, message: presenterError)
+        }
+        DispatchQueue.main.async {
+            self.tableView.refreshControl?.endRefreshing()
         }
     }
     
@@ -128,12 +129,7 @@ extension CountriesListViewController: UITableViewDataSource, UITableViewDelegat
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == 0 {
-            if let presenter, let countries = presenter.countries {
-                return countries.count
-            } else {
-                return 0
-            }
-            
+            return presenter?.countries?.count ?? 0
         } else {
             return isShowingActivityIndicator ? 1 : 0
         }
