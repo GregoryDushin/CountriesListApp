@@ -25,11 +25,11 @@ class CountriesListPresenterTests: XCTestCase {
         presenter = CountriesListPresenter(dataLoader: mockDataLoader)
         presenter.coreDataManager = mockCoreDataManager
         
-  
+        
         mockManagedObjectContext = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
         
         mockCountryPersistenceObject = CountryPersistanceObject(context: mockManagedObjectContext)
-
+        
         mockCountryPersistenceObject.name = "Mock Country"
         mockCountryPersistenceObject.continent = "Mock Continent"
         mockCountryPersistenceObject.capital = "Mock Capital"
@@ -48,9 +48,9 @@ class CountriesListPresenterTests: XCTestCase {
         mockManagedObjectContext = nil
         super.tearDown()
     }
-
+    
     func testGetData_WithSavedCountries_ShouldLoadFromCoreData() {
-
+        
         mockCoreDataManager.savedCountries = [mockCountryPersistenceObject]
         
         presenter.getData()
@@ -69,7 +69,7 @@ class CountriesListPresenterTests: XCTestCase {
     }
     
     func testLoadNextPage_WithNextPageUrl_ShouldLoadNextPage() {
-
+        
         presenter.nextPageUrl = "test.com"
         presenter.loadNextPage()
         XCTAssertEqual(mockDataLoader.loadCallCount, 1)
@@ -81,6 +81,7 @@ class CountriesListPresenterTests: XCTestCase {
     }
     
     func testSavedCountry() {
+        
         mockCoreDataManager.savedCountries = []
         
         let mockCountry = Country(name: "Test Country", continent: "Test Continent", capital: "Test Capital", population: 1000000, descriptionSmall: "Test Description Small", description: "Test Description", image: "Test Img", countryInfo: CountryInfo(images: ["Test Image 1", "Test Image 2"], flag: "Test Flag"))
@@ -88,8 +89,8 @@ class CountriesListPresenterTests: XCTestCase {
         presenter.coreDataManager.saveCountry(from: mockCountry)
         
         debugPrint(mockCoreDataManager.savedCountries.count)
-            
-            XCTAssertTrue(mockCoreDataManager.savedCountries.count == 1, "One country should be saved")
+        
+        XCTAssertTrue(mockCoreDataManager.savedCountries.count == 1, "One country should be saved")
     }
     
     
@@ -98,7 +99,7 @@ class CountriesListPresenterTests: XCTestCase {
 
 class MockDataLoader: DataLoadable {
     var loadCallCount = 0
-
+    
     func loadData<ResultType: Decodable>(from url: String, responseType: ResultType.Type, completion: @escaping (Result<ResultType, Error>) -> Void) {
         loadCallCount += 1
     }
@@ -108,21 +109,21 @@ class MockCoreDataManager: CoreDataManagerProtocol {
     
     var savedCountries: [CountryPersistanceObject] = []
     
-    func saveCountry(from serverModel: CountriesListApp.Country) {
-        func saveCountry(from serverModel: CountriesListApp.Country) {
-            let countryPersistenceObject = CountryPersistanceObject()
-
-            countryPersistenceObject.name = serverModel.name
-            countryPersistenceObject.continent = serverModel.continent
-            countryPersistenceObject.capital = serverModel.capital
-            countryPersistenceObject.population = Int64(serverModel.population)
-            countryPersistenceObject.descriptionSmall = serverModel.descriptionSmall
-            countryPersistenceObject.descriptionFull = serverModel.description
-            countryPersistenceObject.flag = serverModel.countryInfo.flag
-            countryPersistenceObject.images = serverModel.countryInfo.images
-            
-            savedCountries.append(countryPersistenceObject)
-        }
+    func saveCountry(from serverModel: Country) {
+        
+        let countryPersistenceObject = CountryPersistanceObject()
+        
+        countryPersistenceObject.name = serverModel.name
+        countryPersistenceObject.continent = serverModel.continent
+        countryPersistenceObject.capital = serverModel.capital
+        countryPersistenceObject.population = Int64(serverModel.population)
+        countryPersistenceObject.descriptionSmall = serverModel.descriptionSmall
+        countryPersistenceObject.descriptionFull = serverModel.description
+        countryPersistenceObject.flag = serverModel.countryInfo.flag
+        countryPersistenceObject.images = serverModel.countryInfo.images
+        
+        savedCountries.append(countryPersistenceObject)
+        debugPrint(savedCountries.count)
     }
     
     func hasSavedCountries() -> Bool {
