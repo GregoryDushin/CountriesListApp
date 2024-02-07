@@ -16,10 +16,10 @@ final class CountriesListPresenter: CountriesListPresenterProtocol {
     
     weak var view: CountriesListProtocol?
     private let dataLoader: DataLoadable
-    var coreDataManager = CoreDataManager.shared
+    private let coreDataManager = CoreDataManager.shared
     private var nextPageUrl: String?
-    var countries: [Country]?
-    var error: String?
+    private(set) var countries: [Country]?
+    private(set) var error: String?
     var isLoadingData: Bool = false
     
     init(dataLoader: DataLoadable) {

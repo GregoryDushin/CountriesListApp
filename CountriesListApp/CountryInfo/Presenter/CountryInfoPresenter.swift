@@ -25,8 +25,8 @@ final class CountryInfoPresenter: CountryInfoPresenterProtocol {
     }
     
     weak var view: CountryInfoProtocol?
-    var country: Country
-    var countryInfoArray : [CountryInfoModel]?
+    let country: Country
+    private(set) var countryInfoArray : [CountryInfoModel]?
     
     init(country: Country) {
         self.country = country

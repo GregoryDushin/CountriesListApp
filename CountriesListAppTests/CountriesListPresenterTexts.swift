@@ -19,7 +19,7 @@ final class CountriesListPresenterTexts: XCTestCase {
            mockDataLoader = MockDataLoader()
            mockCoreDataManager = MockCoreDataManager()
            presenter = CountriesListPresenter(dataLoader: mockDataLoader)
-         //  presenter.coreDataManager = mockCoreDataManager  //hz
+            //presenter.coreDataManager = mockCoreDataManager  //hz
        }
     
 }

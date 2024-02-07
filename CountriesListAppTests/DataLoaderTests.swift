@@ -4,55 +4,61 @@
 //
 //  Created by Григорий Душин on 06.02.2024.
 //
-
 import XCTest
 @testable import CountriesListApp
 
 final class CountriesListAppTests: XCTestCase {
     
-    // MARK: - Test cases
+    private func makeMockSession(data: Data?, error: Error?) -> URLSession {
+        let response = HTTPURLResponse(
+            url: URL(string: DataLoaderMocks.mockUrl)!,
+            statusCode: 200,
+            httpVersion: nil,
+            headerFields: nil
+        )
+        URLProtocolMock.mockURLs = [URL(string: DataLoaderMocks.mockUrl)!: (error, data, response)]
+        let sessionConfiguration = URLSessionConfiguration.ephemeral
+        sessionConfiguration.protocolClasses = [URLProtocolMock.self]
+        
+        return URLSession(configuration: sessionConfiguration)
+    }
     
     func testLoadData_Success() {
         
-        let mockSession = MockURLSession(data: DataLoaderMocks.mockData, response: nil, error: nil)
-        let dataLoader = DataLoader(session: mockSession)
+        let dataLoader = DataLoader(session: makeMockSession(data: DataLoaderMocks.mockData.data(using: .utf8)!, error: nil))
         var actualResult: CountryResponse?
-        var error: Error?
-        let expectation = self.expectation(description: "Data loaded successfully")
+        let expectation = expectation(description: "Data loaded successfully")
         
         dataLoader.loadData(from: DataLoaderMocks.mockUrl, responseType: CountryResponse.self) { result in
             switch result {
             case .success(let result):
                 actualResult = result
-            case .failure(let err):
-                error = err
+            case .failure(let error):
+                XCTFail("Loading data failed with error: \(error)")
             }
-
+            
             expectation.fulfill()
         }
         
         waitForExpectations(timeout: 5, handler: nil)
         
-        XCTAssertNil(error)
+        XCTAssertNotNil(actualResult, "No result received")
         XCTAssertEqual(actualResult, DataLoaderMocks.expectedResult)
     }
     
     func testLoadData_Failure() {
         
-        let mockSession = MockURLSession(data: nil, response: nil, error: LoaderError.dataFailed)
-        
-        let dataLoader = DataLoader(session: mockSession)
+        let dataLoader = DataLoader(session: makeMockSession(data: nil, error: LoaderError.dataFailed))
         var actualError: Error?
-        let expectation = self.expectation(description: "Data loading failed")
-        
+        let expectation = expectation(description: "Data loading failed")
         dataLoader.loadData(from: DataLoaderMocks.mockUrl, responseType: CountryResponse.self) { result in
             switch result {
             case .success:
                 break
-            case .failure(let err):
-                actualError = err
+            case .failure(let error):
+                actualError = error
             }
-
+            
             expectation.fulfill()
         }
         
@@ -60,4 +66,5 @@ final class CountriesListAppTests: XCTestCase {
         
         XCTAssertNotNil(actualError)
     }
+    
 }

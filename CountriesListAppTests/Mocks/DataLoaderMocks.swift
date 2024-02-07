@@ -9,6 +9,7 @@
 import Foundation
 
 final class DataLoaderMocks {
+
     static let mockData = """
 {
             "next":"test_url",
@@ -27,7 +28,7 @@ final class DataLoaderMocks {
                 }
 ]
 }
-""".data(using: .utf8)!
+"""
     
     static let expectedResult = CountryResponse(
         next: "test_url",
@@ -47,35 +48,41 @@ final class DataLoaderMocks {
     static let mockUrl = "https://test.com"
 }
 
-final class MockURLSession: URLSession {
+class URLProtocolMock: URLProtocol {
     
-    var data: Data?
-    var response: URLResponse?
-    var error: Error?
-    
-    init(data: Data?, response: URLResponse?, error: Error?) {
-        self.data = data
-        self.response = response
-        self.error = error
+    static var mockURLs = [URL?: (error: Error?, data: Data?, response: HTTPURLResponse?)]()
+    override class func canInit(with request: URLRequest) -> Bool {
+        
+        true
     }
     
-    override func dataTask(with url: URL, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> URLSessionDataTask {
-        let task = MockURLSessionDataTask {
-            completionHandler(self.data, self.response, self.error)
+    override class func canonicalRequest(for request: URLRequest) -> URLRequest {
+        
+        request
+    }
+    
+    override func startLoading() {
+        if let url = request.url {
+            if let (error, data, response) = URLProtocolMock.mockURLs[url] {
+                
+                if let response {
+                    self.client?.urlProtocol(self, didReceive: response, cacheStoragePolicy: .notAllowed)
+                }
+                
+                if let data {
+                    self.client?.urlProtocol(self, didLoad: data)
+                }
+    
+                if let error {
+                    self.client?.urlProtocol(self, didFailWithError: error)
+                }
+            }
         }
-        return task
-    }
-}
-
-class MockURLSessionDataTask: URLSessionDataTask {
-    
-    private let closure: () -> Void
-    
-    init(closure: @escaping () -> Void) {
-        self.closure = closure
+        
+        self.client?.urlProtocolDidFinishLoading(self)
     }
     
-    override func resume() {
-        closure()
+    override func stopLoading() {
+        
     }
 }
