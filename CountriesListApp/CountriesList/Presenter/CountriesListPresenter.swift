@@ -16,14 +16,15 @@ final class CountriesListPresenter: CountriesListPresenterProtocol {
     
     weak var view: CountriesListProtocol?
     private let dataLoader: DataLoadable
-    private let coreDataManager = CoreDataManager.shared
-    private var nextPageUrl: String?
+    var coreDataManager: CoreDataManagerProtocol
+    var nextPageUrl: String?
     private(set) var countries: [Country]?
     private(set) var error: String?
     var isLoadingData: Bool = false
     
     init(dataLoader: DataLoadable) {
         self.dataLoader = dataLoader
+        self.coreDataManager = CoreDataManager.shared
     }
     
     func getData() {
