@@ -8,7 +8,14 @@
 import UIKit
 import CoreData
 
-final class CoreDataManager {
+protocol CoreDataManagerProtocol {
+    func fetchAllCountries() -> [CountryPersistanceObject]
+    func saveCountry(from serverModel: Country)
+    func hasSavedCountries() -> Bool
+    func clearData()
+}
+
+final class CoreDataManager: CoreDataManagerProtocol {
     
     private struct Constants {
         static let formatFetchRequest = "name == %@"
