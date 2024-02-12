@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		F312853F2B725EA800C537A4 /* DataLoaderMocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = F312853E2B725EA800C537A4 /* DataLoaderMocks.swift */; };
+		F312853F2B725EA800C537A4 /* LoadersMocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = F312853E2B725EA800C537A4 /* LoadersMocks.swift */; };
 		F31285412B73B3BE00C537A4 /* CountriesListPresenterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F31285402B73B3BD00C537A4 /* CountriesListPresenterTests.swift */; };
 		F31285432B74123100C537A4 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F31285422B74123100C537A4 /* Extensions.swift */; };
 		F31285452B7A556A00C537A4 /* CountriesListPresenterMocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = F31285442B7A556A00C537A4 /* CountriesListPresenterMocks.swift */; };
@@ -66,7 +66,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		F312853E2B725EA800C537A4 /* DataLoaderMocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataLoaderMocks.swift; sourceTree = "<group>"; };
+		F312853E2B725EA800C537A4 /* LoadersMocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadersMocks.swift; sourceTree = "<group>"; };
 		F31285402B73B3BD00C537A4 /* CountriesListPresenterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountriesListPresenterTests.swift; sourceTree = "<group>"; };
 		F31285422B74123100C537A4 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		F31285442B7A556A00C537A4 /* CountriesListPresenterMocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountriesListPresenterMocks.swift; sourceTree = "<group>"; };
@@ -138,7 +138,7 @@
 		F312853D2B725DC000C537A4 /* Mocks */ = {
 			isa = PBXGroup;
 			children = (
-				F312853E2B725EA800C537A4 /* DataLoaderMocks.swift */,
+				F312853E2B725EA800C537A4 /* LoadersMocks.swift */,
 				F31285442B7A556A00C537A4 /* CountriesListPresenterMocks.swift */,
 				F312854A2B7A63AE00C537A4 /* CountryInfoPresenterMocks.swift */,
 				F31285422B74123100C537A4 /* Extensions.swift */,
@@ -528,7 +528,7 @@
 				F31285412B73B3BE00C537A4 /* CountriesListPresenterTests.swift in Sources */,
 				F3E05CD92B7252B4006ED22F /* DataLoaderTests.swift in Sources */,
 				F31285472B7A62BD00C537A4 /* ImageLoaderTests.swift in Sources */,
-				F312853F2B725EA800C537A4 /* DataLoaderMocks.swift in Sources */,
+				F312853F2B725EA800C537A4 /* LoadersMocks.swift in Sources */,
 				F31285492B7A633500C537A4 /* CountryInfoPresenterTests.swift in Sources */,
 				F31285432B74123100C537A4 /* Extensions.swift in Sources */,
 				F31285452B7A556A00C537A4 /* CountriesListPresenterMocks.swift in Sources */,

@@ -9,39 +9,39 @@ import XCTest
 @testable import CountriesListApp
 
 final class CountryInfoPresenterTests: XCTestCase {
-
+    
     var presenter: CountryInfoPresenter!
-        var mockCountry: Country!
-        var mockView: MockCountryInfoView!
+    var mockCountry: Country!
+    var mockView: MockCountryInfoView!
+    
+    override func setUp() {
+        super.setUp()
         
-        override func setUp() {
-            super.setUp()
-
-            mockCountry = CountryInfoPresenterMocks.mockCountry
-            mockView = MockCountryInfoView()
-            presenter = CountryInfoPresenter(country: mockCountry)
-            presenter.view = mockView
-        }
-        
-        override func tearDown() {
-            presenter = nil
-            mockCountry = nil
-            mockView = nil
-            super.tearDown()
-        }
-        
-        func testGetData_Presented() {
-            presenter.getData()
-            XCTAssertTrue(mockView.presented)
-        }
-        
-        func testCountryInfoArray_NotNil() {
-            presenter.getData()
-            XCTAssertNotNil(presenter.countryInfoArray)
-        }
-        
-        func testCountryInfoArray_Count() {
-            presenter.getData()
-            XCTAssertEqual(presenter.countryInfoArray?.count, 3)
-        }
+        mockCountry = CountryInfoPresenterMocks.mockCountry
+        mockView = MockCountryInfoView()
+        presenter = CountryInfoPresenter(country: mockCountry)
+        presenter.view = mockView
     }
+    
+    override func tearDown() {
+        presenter = nil
+        mockCountry = nil
+        mockView = nil
+        super.tearDown()
+    }
+    
+    func testGetData_Presented() {
+        presenter.getData()
+        XCTAssertTrue(mockView.presented)
+    }
+    
+    func testCountryInfoArray_NotNil() {
+        presenter.getData()
+        XCTAssertNotNil(presenter.countryInfoArray)
+    }
+    
+    func testCountryInfoArray_Count() {
+        presenter.getData()
+        XCTAssertEqual(presenter.countryInfoArray?.count, 3)
+    }
+}

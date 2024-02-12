@@ -10,7 +10,11 @@ import UIKit
 
 final class ImageLoader: ImageLoadable {
     
-    private let session = URLSession.shared
+    private let session: URLSession
+    
+    init(session: URLSession = URLSession.shared) {
+        self.session = session
+    }
 
     public static var imageCache = NSCache<NSString, UIImage>()
     

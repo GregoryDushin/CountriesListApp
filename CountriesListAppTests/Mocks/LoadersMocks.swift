@@ -6,7 +6,7 @@
 //
 
 @testable import CountriesListApp
-import Foundation
+import UIKit
 
 final class DataLoaderMocks {
     
@@ -46,6 +46,11 @@ final class DataLoaderMocks {
     )
     
     static let mockUrl = "https://test.com"
+}
+
+class ImageLoadersMocks {
+    static let mockImage = UIImage(systemName: "star")!
+    
 }
 
 final class URLProtocolMock: URLProtocol {

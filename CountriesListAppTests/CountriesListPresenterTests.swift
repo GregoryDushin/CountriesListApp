@@ -9,13 +9,12 @@ import XCTest
 @testable import CountriesListApp
 import CoreData
 
-class CountriesListPresenterTests: XCTestCase {
+final class CountriesListPresenterTests: XCTestCase {
     
     var presenter: CountriesListPresenter!
     var mockDataLoader: MockDataLoader!
     var mockCoreDataManager: MockCoreDataManager!
     var mockCountryPersistenceObject: CountryPersistanceObject!
-    var mockManagedObjectContext: NSManagedObjectContext!
     
     override func setUp() {
         super.setUp()
@@ -27,9 +26,7 @@ class CountriesListPresenterTests: XCTestCase {
             coreDataManager: mockCoreDataManager
         )
         
-        mockManagedObjectContext = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
-        
-        mockCountryPersistenceObject = CountryPersistanceObject(context: mockManagedObjectContext)
+        mockCountryPersistenceObject = CountryPersistanceObject(context: NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType))
         
         mockCountryPersistenceObject.name = "Mock Country"
         mockCountryPersistenceObject.continent = "Mock Continent"
@@ -46,7 +43,6 @@ class CountriesListPresenterTests: XCTestCase {
         mockDataLoader = nil
         mockCoreDataManager = nil
         mockCountryPersistenceObject = nil
-        mockManagedObjectContext = nil
         super.tearDown()
     }
     
