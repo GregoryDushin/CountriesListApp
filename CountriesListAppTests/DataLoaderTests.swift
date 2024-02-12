@@ -10,8 +10,12 @@ import XCTest
 final class CountriesListAppTests: XCTestCase {
     
     private func makeMockSession(data: Data?, error: Error?) -> URLSession {
+        guard let url = try? XCTUnwrap(URL(string: DataLoaderMocks.mockUrl), "url not valid") else {
+            fatalError("Failed to create URL")
+        }
+        
         let response = HTTPURLResponse(
-            url: URL(string: DataLoaderMocks.mockUrl)!,
+            url: url,
             statusCode: 200,
             httpVersion: nil,
             headerFields: nil
@@ -24,8 +28,7 @@ final class CountriesListAppTests: XCTestCase {
     }
     
     func testLoadData_Success() {
-        
-        let dataLoader = DataLoader(session: makeMockSession(data: DataLoaderMocks.mockData.data(using: .utf8)!, error: nil))
+        let dataLoader = DataLoader(session: makeMockSession(data: DataLoaderMocks.mockData.data(using: .utf8), error: nil))
         var actualResult: CountryResponse?
         let expectation = expectation(description: "Data loaded successfully")
         

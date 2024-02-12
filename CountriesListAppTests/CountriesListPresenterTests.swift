@@ -1,5 +1,5 @@
 //
-//  CountriesListPresenterTexts.swift
+//  CountriesListPresenterTests.swift
 //  CountriesListAppTests
 //
 //  Created by Григорий Душин on 07.02.2024.
@@ -22,9 +22,10 @@ class CountriesListPresenterTests: XCTestCase {
         
         mockDataLoader = MockDataLoader()
         mockCoreDataManager = MockCoreDataManager()
-        presenter = CountriesListPresenter(dataLoader: mockDataLoader)
-        presenter.coreDataManager = mockCoreDataManager
-        
+        presenter = CountriesListPresenter(
+            dataLoader: mockDataLoader,
+            coreDataManager: mockCoreDataManager
+        )
         
         mockManagedObjectContext = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
         
@@ -55,9 +56,13 @@ class CountriesListPresenterTests: XCTestCase {
         
         presenter.getData()
         
-        XCTAssertNotNil(presenter.countries)
-        XCTAssertEqual(presenter.countries?.count, 1)
-        XCTAssertEqual(presenter.countries?[0].name, "Mock Country")
+        guard let countries = try? XCTUnwrap(presenter.countries , "countries should not be nil") else {
+            fatalError("Failed countries")
+        }
+        
+        XCTAssertNotNil(countries)
+        XCTAssertEqual(countries.count, 1)
+        XCTAssertEqual(countries[0].name, "Mock Country")
         XCTAssertNil(presenter.error)
         XCTAssertEqual(mockDataLoader.loadCallCount, 0)
     }
@@ -83,62 +88,7 @@ class CountriesListPresenterTests: XCTestCase {
     func testSavedCountry() {
         
         mockCoreDataManager.savedCountries = []
-        
-        let mockCountry = Country(name: "Test Country", continent: "Test Continent", capital: "Test Capital", population: 1000000, descriptionSmall: "Test Description Small", description: "Test Description", image: "Test Img", countryInfo: CountryInfo(images: ["Test Image 1", "Test Image 2"], flag: "Test Flag"))
-        
-        presenter.coreDataManager.saveCountry(from: mockCountry)
-        
-        debugPrint(mockCoreDataManager.savedCountries.count)
-        
-        XCTAssertTrue(mockCoreDataManager.savedCountries.count == 1, "One country should be saved")
-    }
-    
-    
-    
-}
-
-class MockDataLoader: DataLoadable {
-    var loadCallCount = 0
-    
-    func loadData<ResultType: Decodable>(from url: String, responseType: ResultType.Type, completion: @escaping (Result<ResultType, Error>) -> Void) {
-        loadCallCount += 1
-    }
-}
-
-class MockCoreDataManager: CoreDataManagerProtocol {
-    
-    var savedCountries: [CountryPersistanceObject] = []
-    
-    func saveCountry(from serverModel: Country) {
-        
-        let countryPersistenceObject = CountryPersistanceObject()
-        
-        countryPersistenceObject.name = serverModel.name
-        countryPersistenceObject.continent = serverModel.continent
-        countryPersistenceObject.capital = serverModel.capital
-        countryPersistenceObject.population = Int64(serverModel.population)
-        countryPersistenceObject.descriptionSmall = serverModel.descriptionSmall
-        countryPersistenceObject.descriptionFull = serverModel.description
-        countryPersistenceObject.flag = serverModel.countryInfo.flag
-        countryPersistenceObject.images = serverModel.countryInfo.images
-        
-        savedCountries.append(countryPersistenceObject)
-        debugPrint(savedCountries.count)
-    }
-    
-    func hasSavedCountries() -> Bool {
-        if savedCountries.isEmpty {
-            return false
-        } else {
-            return true
-        }
-    }
-    
-    func clearData() {
-        savedCountries = []
-    }
-    
-    func fetchAllCountries() -> [CountryPersistanceObject] {
-        return savedCountries
+        mockCoreDataManager.saveCountry(from: MockCountriesListPresenter.mockCountry)
+        XCTAssertTrue(mockCoreDataManager.savedCountries.count == 1, "Одна страна должна быть сохранена")
     }
 }

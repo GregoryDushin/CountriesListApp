@@ -22,9 +22,9 @@ final class CountriesListPresenter: CountriesListPresenterProtocol {
     private(set) var error: String?
     var isLoadingData: Bool = false
     
-    init(dataLoader: DataLoadable) {
+    init(dataLoader: DataLoadable, coreDataManager: CoreDataManagerProtocol ) {
         self.dataLoader = dataLoader
-        self.coreDataManager = CoreDataManager.shared
+        self.coreDataManager = coreDataManager
     }
     
     func getData() {

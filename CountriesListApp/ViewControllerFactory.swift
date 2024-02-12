@@ -16,7 +16,10 @@ struct ViewControllerFactory {
     
     static func createCountriesVC() -> CountriesListViewController {
         let countriesViewController = CountriesListViewController()
-        countriesViewController.presenter = CountriesListPresenter(dataLoader: DataLoader())
+        countriesViewController.presenter = CountriesListPresenter(
+            dataLoader: DataLoader(), 
+            coreDataManager: CoreDataManager.shared
+        )
         return countriesViewController
     }
     static func createCountryInfoVC(country: Country) -> CountryInfoViewController {

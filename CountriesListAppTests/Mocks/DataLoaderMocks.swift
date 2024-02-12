@@ -9,7 +9,7 @@
 import Foundation
 
 final class DataLoaderMocks {
-
+    
     static let mockData = """
 {
             "next":"test_url",
@@ -48,16 +48,20 @@ final class DataLoaderMocks {
     static let mockUrl = "https://test.com"
 }
 
-class URLProtocolMock: URLProtocol {
+final class URLProtocolMock: URLProtocol {
     
-    static var mockURLs = [URL?: (error: Error?, data: Data?, response: HTTPURLResponse?)]()
+    static var mockURLs = [
+        URL?: (
+            error: Error?,
+            data: Data?,
+            response: HTTPURLResponse?)
+    ]()
+    
     override class func canInit(with request: URLRequest) -> Bool {
-        
         true
     }
     
     override class func canonicalRequest(for request: URLRequest) -> URLRequest {
-        
         request
     }
     
@@ -72,7 +76,7 @@ class URLProtocolMock: URLProtocol {
                 if let data {
                     self.client?.urlProtocol(self, didLoad: data)
                 }
-    
+                
                 if let error {
                     self.client?.urlProtocol(self, didFailWithError: error)
                 }
