@@ -10,7 +10,9 @@ import UIKit
 
 final class CountriesListViewController: UIViewController {
     
-    private struct Constants {
+    // MARK: - Constants
+    
+    struct Constants {
         struct Id {
             static let customTableViewCell = String(describing: CustomTableViewCell.self)
             static let activityIndicatorTableViewCell = String(describing: ActivityIndicatorTableViewCell.self)
@@ -24,40 +26,65 @@ final class CountriesListViewController: UIViewController {
         }
     }
     
+    // MARK: - Properties
+    
     private var lastContentOffset: CGFloat = 0
     var presenter: CountriesListPresenter?
     weak var coordinatorDelegate: CountriesListCoordinator?
     private var isShowingActivityIndicator: Bool = false
+    
+    // MARK: - UI Elements
+    
+    private lazy var tableViewDataSource: TableViewDataSource = {
+        let dataSource = TableViewDataSource(presenter: presenter!, isShowingActivityIndicator: isShowingActivityIndicator)
+        return dataSource
+    }()
+    
+    private lazy var tableViewDelegate: TableViewDelegate = {
+        let delegate = TableViewDelegate(presenter: presenter!, coordinatorDelegate: coordinatorDelegate!)
+        return delegate
+    }()
     
     private lazy var tableView: UITableView = {
         let tableView = UITableView(frame: view.bounds, style: .plain)
         tableView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         tableView.register(UINib(nibName: Constants.Id.customTableViewCell, bundle: nil), forCellReuseIdentifier: Constants.Id.customTableViewCell)
         tableView.register(UINib(nibName: Constants.Id.activityIndicatorTableViewCell, bundle: nil), forCellReuseIdentifier: Constants.Id.activityIndicatorTableViewCell)
-        tableView.dataSource = self
-        tableView.delegate = self
+        tableView.dataSource = tableViewDataSource
+        tableView.delegate = tableViewDelegate
         return tableView
     }()
     
-    // MARK: - lifecycle
+    // MARK: - Lifecycle Methods
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        createClearButton()
-        setupPullToRefresh()
+        setupUI()
+        setupNavigationBar()
+        setupTableView()
         presenter?.view = self
         presenter?.getData()
-        navigationItem.title = Constants.UI.countriesScreenNavigationItemTitle
-        view.addSubview(tableView)
-        tableView.delegate = self
     }
     
     override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         updateClearButtonStyle()
     }
     
-    // MARK: - UI Actions
+    // MARK: - UI Setup
+    
+    private func setupUI() {
+        view.addSubview(tableView)
+    }
+    
+    private func setupNavigationBar() {
+        navigationItem.title = Constants.UI.countriesScreenNavigationItemTitle
+        createClearButton()
+    }
+    
+    private func setupTableView() {
+        setupPullToRefresh()
+    }
     
     private func updateClearButtonStyle() {
         navigationController?.navigationBar.tintColor = .black
@@ -73,10 +100,6 @@ final class CountriesListViewController: UIViewController {
         navigationItem.rightBarButtonItem = clearButton
     }
     
-    @objc private func clearButtonTapped() {
-        presenter?.clearMemory()
-    }
-    
     // MARK: - Pull to Refresh
     
     private func setupPullToRefresh() {
@@ -88,6 +111,12 @@ final class CountriesListViewController: UIViewController {
     @objc private func refreshData() {
         presenter?.clearMemory()
         presenter?.getData()
+    }
+    
+    // MARK: - Actions
+    
+    @objc private func clearButtonTapped() {
+        presenter?.clearMemory()
     }
 }
 
@@ -119,9 +148,16 @@ extension CountriesListViewController: CountriesListProtocol {
     }
 }
 
-// MARK: - UITableViewDataSource & UITableViewDelegate
+// MARK: - TableViewDataSource
 
-extension CountriesListViewController: UITableViewDataSource, UITableViewDelegate {
+class TableViewDataSource: NSObject, UITableViewDataSource {
+    var presenter: CountriesListPresenter?
+    var isShowingActivityIndicator: Bool = false
+    
+    init(presenter: CountriesListPresenter, isShowingActivityIndicator: Bool) {
+        self.presenter = presenter
+        self.isShowingActivityIndicator = isShowingActivityIndicator
+    }
     
     func numberOfSections(in tableView: UITableView) -> Int {
         2
@@ -137,11 +173,11 @@ extension CountriesListViewController: UITableViewDataSource, UITableViewDelegat
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.section == 0 {
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: Constants.Id.customTableViewCell, for: indexPath) as? CustomTableViewCell else {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: CountriesListViewController.Constants.Id.customTableViewCell, for: indexPath) as? CustomTableViewCell else {
                 return UITableViewCell()
             }
             
-            if let presenter, let countries = presenter.countries {
+            if let presenter = presenter, let countries = presenter.countries {
                 let country = countries[indexPath.row]
                 cell.configure(with: country)
                 return cell
@@ -150,14 +186,26 @@ extension CountriesListViewController: UITableViewDataSource, UITableViewDelegat
             }
             
         } else {
-            let activityIndicatorCell = tableView.dequeueReusableCell(withIdentifier: Constants.Id.activityIndicatorTableViewCell, for: indexPath) as? ActivityIndicatorTableViewCell
+            let activityIndicatorCell = tableView.dequeueReusableCell(withIdentifier: CountriesListViewController.Constants.Id.activityIndicatorTableViewCell, for: indexPath) as? ActivityIndicatorTableViewCell
             return activityIndicatorCell ?? UITableViewCell()
         }
+    }
+}
+
+// MARK: - TableViewDelegate
+
+class TableViewDelegate: NSObject, UITableViewDelegate {
+    weak var coordinatorDelegate: CountriesListCoordinator?
+    var presenter: CountriesListPresenter?
+    
+    init(presenter: CountriesListPresenter, coordinatorDelegate: CountriesListCoordinator) {
+        self.presenter = presenter
+        self.coordinatorDelegate = coordinatorDelegate
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        if let presenter, let countries = presenter.countries {
+        if let presenter = presenter, let countries = presenter.countries {
             let selectedCountry = countries[indexPath.row]
             coordinatorDelegate?.didSelectCountry(selectedCountry)
         }
