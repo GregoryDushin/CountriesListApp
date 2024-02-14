@@ -7,9 +7,9 @@
 
 import UIKit
 
-final class CountryInfoViewController: UIViewController {
+final class CountryInfoViewController: UIViewController, UICollectionViewDelegate {
     
-    private struct Constants {
+    struct Constants {
         struct Id {
             static let countryDescriptionTableViewCell = String(describing: CountryDescriptionTableViewCell.self)
             static let countryInfoTableViewCell = String(describing: CountryInfoTableViewCell.self)
@@ -34,7 +34,33 @@ final class CountryInfoViewController: UIViewController {
     
     var presenter: CountryInfoPresenter?
     
-// MARK: - lifecycle
+    private lazy var tableViewDataSource: TableViewDataSourceWrapper = {
+        guard let presenter = presenter else {
+            fatalError("Presenter is not set")
+        }
+        return TableViewDataSourceWrapper(presenter: presenter)
+    }()
+    
+    private lazy var tableViewDelegate: TableViewDelegateWrapper = {
+        return TableViewDelegateWrapper()
+    }()
+    
+    private lazy var collectionViewDataSource: CollectionViewDataSourceWrapper = {
+        guard let presenter = presenter else {
+            fatalError("Presenter is not set")
+        }
+        return CollectionViewDataSourceWrapper(presenter: presenter)
+    }()
+    
+    private lazy var collectionViewDelegateFlowLayout: CollectionViewDelegateFlowLayoutWrapper = {
+        return CollectionViewDelegateFlowLayoutWrapper()
+    }()
+    
+    private lazy var scrollViewDelegate: ScrollViewDelegateWrapper = {
+        return ScrollViewDelegateWrapper(pageControl: self.pageControl)
+    }()
+    
+    // MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -46,7 +72,7 @@ final class CountryInfoViewController: UIViewController {
         configureCollectionView()
     }
     
-// MARK: - UI Actions
+    // MARK: - UI Actions
     
     private func configureNavBar() {
         self.navigationController?.navigationBar.tintColor = .white
@@ -56,14 +82,14 @@ final class CountryInfoViewController: UIViewController {
         tableView.register(UINib(nibName: Constants.Id.countryInfoTableViewCell, bundle: nil), forCellReuseIdentifier: Constants.Id.countryInfoTableViewCell)
         tableView.register(UINib(nibName: Constants.Id.countryDescriptionTableViewCell, bundle: nil), forCellReuseIdentifier: Constants.Id.countryDescriptionTableViewCell)
         tableView.register(UINib(nibName: Constants.Id.countryInfoTitleTableViewCell, bundle: nil), forCellReuseIdentifier: Constants.Id.countryInfoTitleTableViewCell)
-        tableView.dataSource = self
-        tableView.delegate = self
+        tableView.dataSource = tableViewDataSource
+        tableView.delegate = tableViewDelegate
     }
     
     private func configureCollectionView() {
         collectionView.register(UINib(nibName: Constants.Id.countryInfoCollectionViewCell, bundle: nil), forCellWithReuseIdentifier: Constants.Id.countryInfoCollectionViewCell)
-        collectionView.dataSource = self
-        collectionView.delegate = self
+        collectionView.dataSource = collectionViewDataSource
+        collectionView.delegate = collectionViewDelegateFlowLayout
         collectionView.isPagingEnabled = true
     }
 }
@@ -83,34 +109,34 @@ extension CountryInfoViewController: CountryInfoProtocol {
     }
 }
 
-// MARK: - UITableViewDataSource & UITableViewDelegate
-
-extension CountryInfoViewController: UITableViewDataSource, UITableViewDelegate {
+class TableViewDataSourceWrapper: NSObject, UITableViewDataSource {
+    weak var presenter: CountryInfoPresenter?
+    
+    init(presenter: CountryInfoPresenter) {
+        self.presenter = presenter
+    }
+    
     func numberOfSections(in tableView: UITableView) -> Int {
-        Constants.RawsAndSectionsCountryInfoTableView.numbersOfSection
+        CountryInfoViewController.Constants.RawsAndSectionsCountryInfoTableView.numbersOfSection
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
-        case Constants.RawsAndSectionsCountryInfoTableView.headerSection:
-            return Constants.RawsAndSectionsCountryInfoTableView.rawsInHeaderlSection
-        case Constants.RawsAndSectionsCountryInfoTableView.infoBlockSection:
-            if let presenter, let countryArray = presenter.countryInfoArray {
-                return countryArray.count
-            } else {
-                return 0
-            }
-        case Constants.RawsAndSectionsCountryInfoTableView.descriptionSection:
-            return Constants.RawsAndSectionsCountryInfoTableView.rawsInDescriptionSection
+        case CountryInfoViewController.Constants.RawsAndSectionsCountryInfoTableView.headerSection:
+            return CountryInfoViewController.Constants.RawsAndSectionsCountryInfoTableView.rawsInHeaderlSection
+        case CountryInfoViewController.Constants.RawsAndSectionsCountryInfoTableView.infoBlockSection:
+            return presenter?.countryInfoArray?.count ?? 0
+        case CountryInfoViewController.Constants.RawsAndSectionsCountryInfoTableView.descriptionSection:
+            return CountryInfoViewController.Constants.RawsAndSectionsCountryInfoTableView.rawsInDescriptionSection
         default:
-            return Constants.RawsAndSectionsCountryInfoTableView.defaultRaws
+            return CountryInfoViewController.Constants.RawsAndSectionsCountryInfoTableView.defaultRaws
         }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch indexPath.section {
-        case Constants.RawsAndSectionsCountryInfoTableView.headerSection:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: Constants.Id.countryInfoTitleTableViewCell, for: indexPath) as? CountryInfoTitleTableViewCell else {
+        case CountryInfoViewController.Constants.RawsAndSectionsCountryInfoTableView.headerSection:
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: CountryInfoViewController.Constants.Id.countryInfoTitleTableViewCell, for: indexPath) as? CountryInfoTitleTableViewCell else {
                 return UITableViewCell()
             }
             
@@ -120,8 +146,8 @@ extension CountryInfoViewController: UITableViewDataSource, UITableViewDelegate 
             
             return cell
             
-        case Constants.RawsAndSectionsCountryInfoTableView.infoBlockSection:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: Constants.Id.countryInfoTableViewCell, for: indexPath) as? CountryInfoTableViewCell else {
+        case CountryInfoViewController.Constants.RawsAndSectionsCountryInfoTableView.infoBlockSection:
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: CountryInfoViewController.Constants.Id.countryInfoTableViewCell, for: indexPath) as? CountryInfoTableViewCell else {
                 return UITableViewCell()
             }
             
@@ -139,7 +165,7 @@ extension CountryInfoViewController: UITableViewDataSource, UITableViewDelegate 
             }
             
         default:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: Constants.Id.countryDescriptionTableViewCell, for: indexPath) as? CountryDescriptionTableViewCell else {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: CountryInfoViewController.Constants.Id.countryDescriptionTableViewCell, for: indexPath) as? CountryDescriptionTableViewCell else {
                 return UITableViewCell()
             }
             
@@ -150,9 +176,11 @@ extension CountryInfoViewController: UITableViewDataSource, UITableViewDelegate 
             return cell
         }
     }
+}
+
+class TableViewDelegateWrapper: NSObject, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        
         if indexPath.section == 0 && indexPath.row == 0 {
             cell.separatorInset = UIEdgeInsets(top: 0, left: tableView.bounds.size.width, bottom: 0, right: 0)
         } else {
@@ -161,10 +189,12 @@ extension CountryInfoViewController: UITableViewDataSource, UITableViewDelegate 
     }
 }
 
-
-// MARK: - UICollectionViewDataSource
-
-extension CountryInfoViewController: UICollectionViewDataSource, UICollectionViewDelegate {
+class CollectionViewDataSourceWrapper: NSObject, UICollectionViewDataSource {
+    weak var presenter: CountryInfoPresenter?
+    
+    init(presenter: CountryInfoPresenter) {
+        self.presenter = presenter
+    }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if let imageCount = presenter?.country.countryInfo.images.count, imageCount > 0 {
@@ -175,7 +205,7 @@ extension CountryInfoViewController: UICollectionViewDataSource, UICollectionVie
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.Id.countryInfoCollectionViewCell, for: indexPath) as? CountryInfoCollectionViewCell else {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CountryInfoViewController.Constants.Id.countryInfoCollectionViewCell, for: indexPath) as? CountryInfoCollectionViewCell else {
             return UICollectionViewCell()
         }
         
@@ -187,24 +217,31 @@ extension CountryInfoViewController: UICollectionViewDataSource, UICollectionVie
     }
 }
 
-// MARK: - UICollectionViewDelegateFlowLayout
-
-extension CountryInfoViewController: UICollectionViewDelegateFlowLayout {
+class CollectionViewDelegateFlowLayoutWrapper: NSObject, UICollectionViewDelegateFlowLayout {
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: collectionView.frame.width, height: collectionView.frame.height)
     }
 }
 
-// MARK: - UIScrollViewDelegate
-
-extension CountryInfoViewController: UIScrollViewDelegate {
+class ScrollViewDelegateWrapper: NSObject, UIScrollViewDelegate {
+    weak var pageControl: UIPageControl?
+    
+    init(pageControl: UIPageControl) {
+        self.pageControl = pageControl
+        super.init()
+    }
+    
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        guard let pageControl = pageControl else { return }
         let pageIndex = round(scrollView.contentOffset.x / scrollView.frame.width)
         pageControl.currentPage = Int(pageIndex)
     }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        guard let pageControl = pageControl else { return }
         let pageIndex = round(scrollView.contentOffset.x / scrollView.frame.width)
         pageControl.currentPage = Int(pageIndex)
     }
 }
+
