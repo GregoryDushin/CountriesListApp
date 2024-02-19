@@ -13,25 +13,6 @@ final class ImageLoaderTests: XCTestCase {
     var imageLoader: ImageLoader!
     var mockSession: URLSession!
     
-    private func makeMockSession(data: Data?, error: Error?) -> URLSession {
-        guard let url = try? XCTUnwrap(URL(string: "https://test.com"), "URL is not valid") else {
-            fatalError("Failed to create URL")
-        }
-        
-        let response = HTTPURLResponse(
-            url: url,
-            statusCode: 200,
-            httpVersion: nil,
-            headerFields: nil
-        )
-        
-        URLProtocolMock.mockURLs = [url: (error, data, response)]
-        let sessionConfiguration = URLSessionConfiguration.ephemeral
-        sessionConfiguration.protocolClasses = [URLProtocolMock.self]
-        
-        return URLSession(configuration: sessionConfiguration)
-    }
-    
     func testLoadImage_Success() {
         
         let expectation = self.expectation(description: "Loading image")
@@ -42,11 +23,10 @@ final class ImageLoaderTests: XCTestCase {
             switch result {
             case .success(let image):
                 XCTAssertNotNil(image)
+                expectation.fulfill()
             case .failure(let error):
                 XCTFail("Expected successful image loading, but got error: \(error)")
             }
-            
-            expectation.fulfill()
         }
         
         waitForExpectations(timeout: 5, handler: nil)
@@ -64,11 +44,14 @@ final class ImageLoaderTests: XCTestCase {
                 XCTFail("Expected failed image loading, but got success")
             case .failure(let error):
                 XCTAssertNotNil(error)
+                expectation.fulfill()
             }
-            
-            expectation.fulfill()
         }
         
         waitForExpectations(timeout: 5, handler: nil)
+    }
+    
+    private func makeMockSession(data: Data?, error: Error?) -> URLSession {
+        TestDataLoader.makeMockSession(data: data, error: error, for: DataLoaderMocks.mockUrl)
     }
 }

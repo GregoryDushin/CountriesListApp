@@ -46,15 +46,13 @@ final class CountriesListPresenterTests: XCTestCase {
         super.tearDown()
     }
     
-    func testGetData_WithSavedCountries_ShouldLoadFromCoreData() {
+    func testGetData_WithSavedCountries_ShouldLoadFromCoreData() throws {
         
         mockCoreDataManager.savedCountries = [mockCountryPersistenceObject]
         
         presenter.getData()
         
-        guard let countries = try? XCTUnwrap(presenter.countries , "countries should not be nil") else {
-            fatalError("Failed countries")
-        }
+        let countries = try XCTUnwrap(presenter.countries , "countries should not be nil")
         
         XCTAssertNotNil(countries)
         XCTAssertEqual(countries.count, 1)

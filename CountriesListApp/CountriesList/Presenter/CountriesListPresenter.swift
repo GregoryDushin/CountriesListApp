@@ -15,7 +15,7 @@ final class CountriesListPresenter: CountriesListPresenterProtocol {
     }
     
     weak var view: CountriesListProtocol?
-    private let dataLoader: DataLoadable
+    private var dataLoader: DataLoadable
     var coreDataManager: CoreDataManagerProtocol
     var nextPageUrl: String?
     private(set) var countries: [Country]?

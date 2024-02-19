@@ -9,24 +9,6 @@ import XCTest
 
 final class CountriesListAppTests: XCTestCase {
     
-    private func makeMockSession(data: Data?, error: Error?) -> URLSession {
-        guard let url = try? XCTUnwrap(URL(string: DataLoaderMocks.mockUrl), "url not valid") else {
-            fatalError("Failed to create URL")
-        }
-        
-        let response = HTTPURLResponse(
-            url: url,
-            statusCode: 200,
-            httpVersion: nil,
-            headerFields: nil
-        )
-        URLProtocolMock.mockURLs = [URL(string: DataLoaderMocks.mockUrl)!: (error, data, response)]
-        let sessionConfiguration = URLSessionConfiguration.ephemeral
-        sessionConfiguration.protocolClasses = [URLProtocolMock.self]
-        
-        return URLSession(configuration: sessionConfiguration)
-    }
-    
     func testLoadData_Success() {
         let dataLoader = DataLoader(session: makeMockSession(data: DataLoaderMocks.mockData.data(using: .utf8), error: nil))
         var actualResult: CountryResponse?
@@ -36,11 +18,10 @@ final class CountriesListAppTests: XCTestCase {
             switch result {
             case .success(let result):
                 actualResult = result
+                expectation.fulfill()
             case .failure(let error):
                 XCTFail("Loading data failed with error: \(error)")
             }
-            
-            expectation.fulfill()
         }
         
         waitForExpectations(timeout: 5, handler: nil)
@@ -60,9 +41,8 @@ final class CountriesListAppTests: XCTestCase {
                 break
             case .failure(let error):
                 actualError = error
+                expectation.fulfill()
             }
-            
-            expectation.fulfill()
         }
         
         waitForExpectations(timeout: 5, handler: nil)
@@ -70,4 +50,7 @@ final class CountriesListAppTests: XCTestCase {
         XCTAssertNotNil(actualError)
     }
     
+    private func makeMockSession(data: Data?, error: Error?) -> URLSession {
+        TestDataLoader.makeMockSession(data: data, error: error, for: DataLoaderMocks.mockUrl)
+    }
 }

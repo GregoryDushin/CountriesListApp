@@ -13,6 +13,8 @@ protocol CoreDataManagerProtocol {
     func saveCountry(from serverModel: Country)
     func hasSavedCountries() -> Bool
     func clearData()
+    func cacheHeight(_ height: CGFloat, for key: String)
+    func fetchCachedHeight(for key: String) -> CGFloat?
 }
 
 final class CoreDataManager: CoreDataManagerProtocol {
@@ -21,6 +23,9 @@ final class CoreDataManager: CoreDataManagerProtocol {
         static let formatFetchRequest = "name == %@"
         static let persistentContainerName = "CountriesListApp"
         static let fetchRequestEntityName = "CountryPersistanceObject"
+        static let cachedHeightsEntityName = "CachedHeight"
+        static let heightAttributeName = "height"
+        static let keyAttributeName = "key"
     }
     
     public static let shared = CoreDataManager()
@@ -95,6 +100,36 @@ final class CoreDataManager: CoreDataManagerProtocol {
             try context.execute(NSBatchDeleteRequest(fetchRequest: countryFetchRequest))
         } catch {
             print("Error clearing Core Data: \(error)")
+        }
+    }
+    
+    func cacheHeight(_ height: CGFloat, for key: String) {
+        let cachedHeightEntity = NSEntityDescription.entity(forEntityName: Constants.cachedHeightsEntityName, in: context)!
+        let cachedHeight = NSManagedObject(entity: cachedHeightEntity, insertInto: context)
+        cachedHeight.setValue(height, forKey: Constants.heightAttributeName)
+        cachedHeight.setValue(key, forKey: Constants.keyAttributeName)
+        
+        do {
+            try context.save()
+        } catch {
+            print("Error caching height: \(error)")
+        }
+    }
+    
+    func fetchCachedHeight(for key: String) -> CGFloat? {
+        let fetchRequest: NSFetchRequest<NSFetchRequestResult> = NSFetchRequest(entityName: Constants.cachedHeightsEntityName)
+        fetchRequest.predicate = NSPredicate(format: "\(Constants.keyAttributeName) == %@", key)
+
+        do {
+            let cachedHeights = try context.fetch(fetchRequest) as! [NSManagedObject]
+            if let cachedHeight = cachedHeights.first {
+                return cachedHeight.value(forKey: Constants.heightAttributeName) as? CGFloat
+            } else {
+                return nil
+            }
+        } catch {
+            print("Error fetching cached height: \(error)")
+            return nil
         }
     }
 }

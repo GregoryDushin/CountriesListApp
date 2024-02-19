@@ -33,15 +33,7 @@ final class CountryInfoPresenterTests: XCTestCase {
     func testGetData_Presented() {
         presenter.getData()
         XCTAssertTrue(mockView.presented)
-    }
-    
-    func testCountryInfoArray_NotNil() {
-        presenter.getData()
         XCTAssertNotNil(presenter.countryInfoArray)
-    }
-    
-    func testCountryInfoArray_Count() {
-        presenter.getData()
         XCTAssertEqual(presenter.countryInfoArray?.count, 3)
     }
 }

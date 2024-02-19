@@ -34,11 +34,18 @@ class MockDataLoader: DataLoadable {
 }
 
 class MockCoreDataManager: CoreDataManagerProtocol {
-    
+
     var savedCountries: [CountryPersistanceObject] = []
     
     let mockManagedObjectContext = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
     
+    func cacheHeight(_ height: CGFloat, for key: String) {
+
+    }
+    
+    func fetchCachedHeight(for key: String) -> CGFloat? {
+        return 100.0
+    }
     
     func saveCountry(from serverModel: Country) {
         

@@ -95,3 +95,25 @@ final class URLProtocolMock: URLProtocol {
         
     }
 }
+
+final class TestDataLoader {
+    
+    static func makeMockSession(data: Data?, error: Error?, for url: String) -> URLSession {
+        guard let validURL = URL(string: url) else {
+            fatalError("Failed to create URL")
+        }
+        
+        let response = HTTPURLResponse(
+            url: validURL,
+            statusCode: 200,
+            httpVersion: nil,
+            headerFields: nil
+        )
+        
+        URLProtocolMock.mockURLs = [validURL: (error, data, response)]
+        let sessionConfiguration = URLSessionConfiguration.ephemeral
+        sessionConfiguration.protocolClasses = [URLProtocolMock.self]
+        
+        return URLSession(configuration: sessionConfiguration)
+    }
+}

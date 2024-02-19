@@ -14,6 +14,12 @@ final class CustomTableViewCell: UITableViewCell {
     @IBOutlet private var descriptionLabel: UILabel!
     @IBOutlet private var capitalLabel: UILabel!
     
+    private var cachedHeight: CGFloat = UITableView.automaticDimension {
+        didSet {
+            setNeedsLayout()
+        }
+    }
+    
     private var imageLoader = ImageLoader()
     private var imageURL: String?
     
@@ -42,5 +48,19 @@ final class CustomTableViewCell: UITableViewCell {
                 print("Failed to load image: \(error.localizedDescription)")
             }
         }
+    }
+    
+    func setCachedHeight(_ height: CGFloat) {
+        contentView.frame.size.height = height
+    }
+    
+    func calculateHeight() -> CGFloat {
+        let fittingSize = contentView.systemLayoutSizeFitting(
+            CGSize(width: bounds.width, height: UIView.layoutFittingCompressedSize.height),
+            withHorizontalFittingPriority: .required,
+            verticalFittingPriority: .fittingSizeLevel
+        )
+        
+        return fittingSize.height
     }
 }
