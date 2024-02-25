@@ -28,17 +28,7 @@ final class CountriesListViewController: UIViewController {
     private var lastContentOffset: CGFloat = 0
     var presenter: CountriesListPresenter?
     weak var coordinatorDelegate: CountriesListCoordinator?
-    private var coreDataManager: CoreDataManagerProtocol?
     private var isShowingActivityIndicator: Bool = false
-    
-    init(coreDataManager: CoreDataManagerProtocol) {
-        self.coreDataManager = coreDataManager
-        super.init(nibName: nil, bundle: nil)
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
     
     private lazy var tableView: UITableView = {
         let tableView = UITableView(frame: view.bounds, style: .plain)
@@ -152,28 +142,31 @@ extension CountriesListViewController: UITableViewDataSource, UITableViewDelegat
                 return UITableViewCell()
             }
             
-            if let presenter, let countries = presenter.countries {
-                let country = countries[indexPath.row]
-                cell.configure(with: country)
-                
-                if let coreDataManager {
-                    if let cachedHeight = coreDataManager.fetchCachedHeight(for: country.name) {
-                        cell.setCachedHeight(cachedHeight)
-                    } else {
-                        let height = cell.calculateHeight()
-                        coreDataManager.cacheHeight(height, for: country.name)
-                        cell.setCachedHeight(height)
-                    }
-                }
-                
-                return cell
-            } else {
+            guard let presenter = presenter, let countries = presenter.countries else {
                 return UITableViewCell()
             }
+
+            let country = countries[indexPath.row]
+            cell.configure(with: country)
+            presenter.saveHeightToCoreData(cell.calculateHeight(), for: country)
+
+            return cell
             
         } else {
             let activityIndicatorCell = tableView.dequeueReusableCell(withIdentifier: Constants.Id.activityIndicatorTableViewCell, for: indexPath) as? ActivityIndicatorTableViewCell
             return activityIndicatorCell ?? UITableViewCell()
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        guard let presenter = presenter, let country = presenter.countries else {
+            return UITableView.automaticDimension
+        }
+        
+        if let contentHeight = country[indexPath.row].contentHeight {
+            return contentHeight
+        } else {
+            return UITableView.automaticDimension
         }
     }
     

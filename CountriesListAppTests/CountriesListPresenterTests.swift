@@ -83,6 +83,6 @@ final class CountriesListPresenterTests: XCTestCase {
         
         mockCoreDataManager.savedCountries = []
         mockCoreDataManager.saveCountry(from: MockCountriesListPresenter.mockCountry)
-        XCTAssertTrue(mockCoreDataManager.savedCountries.count == 1, "Одна страна должна быть сохранена")
+        XCTAssertTrue(mockCoreDataManager.savedCountries.count == 1, "One country has to be saved")
     }
 }

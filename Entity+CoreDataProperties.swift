@@ -24,6 +24,7 @@ final public class CountryPersistanceObject: NSManagedObject {
     @NSManaged public var descriptionFull: String
     @NSManaged public var images: [String]
     @NSManaged public var flag: String
+    @NSManaged public var contentHeight: CGFloat
     
     static func create(from serverModel: Country, in context: NSManagedObjectContext) -> CountryPersistanceObject {
         let entity = CountryPersistanceObject(entity: CountryPersistanceObject.entity(), insertInto: context)
@@ -36,6 +37,10 @@ final public class CountryPersistanceObject: NSManagedObject {
         entity.descriptionFull = serverModel.description
         entity.flag = serverModel.countryInfo.flag
         entity.images = serverModel.countryInfo.images
+
+        if let height = serverModel.contentHeight {
+            entity.contentHeight = height
+        }
         
         return entity
     }
@@ -48,6 +53,10 @@ final public class CountryPersistanceObject: NSManagedObject {
         existingCountry.descriptionFull = serverModel.description
         existingCountry.flag = serverModel.countryInfo.flag
         existingCountry.images = serverModel.countryInfo.images
+
+        if let height = serverModel.contentHeight {
+            existingCountry.contentHeight = height
+        }
     }
 }
 

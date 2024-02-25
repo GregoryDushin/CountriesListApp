@@ -96,6 +96,11 @@ final class CountriesListPresenter: CountriesListPresenterProtocol {
     private func mapToCountryModel(_ countries: [CountryPersistanceObject]) -> [Country] {
         countries.map { Country.mapToCountryModel($0) }
     }
+    
+    func saveHeightToCoreData(_ height: CGFloat, for country: Country ) {
+        coreDataManager.cacheHeight(for: country.name, height: height)
+    }
+
 }
 
 
