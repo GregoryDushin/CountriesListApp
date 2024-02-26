@@ -15,15 +15,16 @@ final class CountriesListPresenter: CountriesListPresenterProtocol {
     }
     
     weak var view: CountriesListProtocol?
-    private let dataLoader: DataLoader
-    private let coreDataManager = CoreDataManager.shared
-    private var nextPageUrl: String?
-    var countries: [Country]?
-    var error: String?
+    private var dataLoader: DataLoadable
+    var coreDataManager: CoreDataManagerProtocol
+    var nextPageUrl: String?
+    private(set) var countries: [Country]?
+    private(set) var error: String?
     var isLoadingData: Bool = false
     
-    init(dataLoader: DataLoader) {
+    init(dataLoader: DataLoadable, coreDataManager: CoreDataManagerProtocol ) {
         self.dataLoader = dataLoader
+        self.coreDataManager = coreDataManager
     }
     
     func getData() {
@@ -95,4 +96,11 @@ final class CountriesListPresenter: CountriesListPresenterProtocol {
     private func mapToCountryModel(_ countries: [CountryPersistanceObject]) -> [Country] {
         countries.map { Country.mapToCountryModel($0) }
     }
+    
+    func saveHeightToCoreData(_ height: CGFloat, for country: Country ) {
+        coreDataManager.cacheHeight(for: country.name, height: height)
+    }
+
 }
+
+

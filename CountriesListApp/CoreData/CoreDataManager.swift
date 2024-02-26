@@ -8,7 +8,15 @@
 import UIKit
 import CoreData
 
-final class CoreDataManager {
+protocol CoreDataManagerProtocol {
+    func fetchAllCountries() -> [CountryPersistanceObject]
+    func saveCountry(from serverModel: Country)
+    func hasSavedCountries() -> Bool
+    func clearData()
+    func cacheHeight(for countryName: String, height: CGFloat)
+}
+
+final class CoreDataManager: CoreDataManagerProtocol {
     
     private struct Constants {
         static let formatFetchRequest = "name == %@"
@@ -41,24 +49,24 @@ final class CoreDataManager {
     func saveCountry(from serverModel: Country) {
         let fetchRequest: NSFetchRequest<CountryPersistanceObject> = CountryPersistanceObject.fetchRequest()
         fetchRequest.predicate = NSPredicate(format: "name == %@", serverModel.name)
-
+        
         do {
             let existingCountries = try context.fetch(fetchRequest)
-
+            
             if let existingCountry = existingCountries.first {
                 CountryPersistanceObject.update(existingCountry, with: serverModel)
             } else {
                 let countryEntity = CountryPersistanceObject.create(from: serverModel, in: context)
                 context.insert(countryEntity)
             }
-
+            
             try context.save()
         } catch {
             print("Error saving country: \(error)")
         }
     }
     
-
+    
     
     func fetchAllCountries() -> [CountryPersistanceObject] {
         do {
@@ -72,7 +80,7 @@ final class CoreDataManager {
             return []
         }
     }
-
+    
     func hasSavedCountries() -> Bool {
         do {
             let countries = try context.fetch(countryFetchRequest) as? [CountryPersistanceObject] ?? []
@@ -90,5 +98,18 @@ final class CoreDataManager {
             print("Error clearing Core Data: \(error)")
         }
     }
+    
+    func cacheHeight(for countryName: String, height: CGFloat) {
+        let fetchRequest: NSFetchRequest<CountryPersistanceObject> = CountryPersistanceObject.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "name == %@", countryName)
+        
+        do {
+            if let country = try context.fetch(fetchRequest).first {
+                country.contentHeight = NSNumber(nonretainedObject: height)
+                try context.save()
+            }
+        } catch {
+            print("Error caching height: \(error)")
+        }
+    }
 }
-

@@ -7,6 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F312853F2B725EA800C537A4 /* LoadersMocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = F312853E2B725EA800C537A4 /* LoadersMocks.swift */; };
+		F31285412B73B3BE00C537A4 /* CountriesListPresenterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F31285402B73B3BD00C537A4 /* CountriesListPresenterTests.swift */; };
+		F31285432B74123100C537A4 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F31285422B74123100C537A4 /* Extensions.swift */; };
+		F31285452B7A556A00C537A4 /* CountriesListPresenterMocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = F31285442B7A556A00C537A4 /* CountriesListPresenterMocks.swift */; };
+		F31285472B7A62BD00C537A4 /* ImageLoaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F31285462B7A62BD00C537A4 /* ImageLoaderTests.swift */; };
+		F31285492B7A633500C537A4 /* CountryInfoPresenterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F31285482B7A633500C537A4 /* CountryInfoPresenterTests.swift */; };
+		F312854B2B7A63AE00C537A4 /* CountryInfoPresenterMocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = F312854A2B7A63AE00C537A4 /* CountryInfoPresenterMocks.swift */; };
 		F321B0D22B5185E6009E416C /* CountryInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F321B0D02B5185E6009E416C /* CountryInfoViewController.swift */; };
 		F321B0D32B5185E6009E416C /* CountryInfoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F321B0D12B5185E6009E416C /* CountryInfoViewController.xib */; };
 		F321B0D62B51873E009E416C /* CountryInfoCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F321B0D42B51873E009E416C /* CountryInfoCollectionViewCell.swift */; };
@@ -45,9 +52,27 @@
 		F3E05CCB2B600FBA006ED22F /* CountriesListApp.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = F3E05CC92B600FBA006ED22F /* CountriesListApp.xcdatamodeld */; };
 		F3E05CCE2B6C4D74006ED22F /* ActivityIndicatorTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3E05CCC2B6C4D74006ED22F /* ActivityIndicatorTableViewCell.swift */; };
 		F3E05CCF2B6C4D74006ED22F /* ActivityIndicatorTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F3E05CCD2B6C4D74006ED22F /* ActivityIndicatorTableViewCell.xib */; };
+		F3E05CD92B7252B4006ED22F /* DataLoaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3E05CD82B7252B4006ED22F /* DataLoaderTests.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		F3E05CDA2B7252B4006ED22F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F34CB9B82B344A2300F8EF83 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F34CB9BF2B344A2300F8EF83;
+			remoteInfo = CountriesListApp;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
+		F312853E2B725EA800C537A4 /* LoadersMocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadersMocks.swift; sourceTree = "<group>"; };
+		F31285402B73B3BD00C537A4 /* CountriesListPresenterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountriesListPresenterTests.swift; sourceTree = "<group>"; };
+		F31285422B74123100C537A4 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		F31285442B7A556A00C537A4 /* CountriesListPresenterMocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountriesListPresenterMocks.swift; sourceTree = "<group>"; };
+		F31285462B7A62BD00C537A4 /* ImageLoaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageLoaderTests.swift; sourceTree = "<group>"; };
+		F31285482B7A633500C537A4 /* CountryInfoPresenterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryInfoPresenterTests.swift; sourceTree = "<group>"; };
+		F312854A2B7A63AE00C537A4 /* CountryInfoPresenterMocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryInfoPresenterMocks.swift; sourceTree = "<group>"; };
 		F321B0D02B5185E6009E416C /* CountryInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryInfoViewController.swift; sourceTree = "<group>"; };
 		F321B0D12B5185E6009E416C /* CountryInfoViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CountryInfoViewController.xib; sourceTree = "<group>"; };
 		F321B0D42B51873E009E416C /* CountryInfoCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryInfoCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -88,6 +113,8 @@
 		F3E05CCA2B600FBA006ED22F /* CountriesListApp.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = CountriesListApp.xcdatamodel; sourceTree = "<group>"; };
 		F3E05CCC2B6C4D74006ED22F /* ActivityIndicatorTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityIndicatorTableViewCell.swift; sourceTree = "<group>"; };
 		F3E05CCD2B6C4D74006ED22F /* ActivityIndicatorTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ActivityIndicatorTableViewCell.xib; sourceTree = "<group>"; };
+		F3E05CD62B7252B4006ED22F /* CountriesListAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CountriesListAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		F3E05CD82B7252B4006ED22F /* DataLoaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataLoaderTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -98,9 +125,27 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		F3E05CD32B7252B4006ED22F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		F312853D2B725DC000C537A4 /* Mocks */ = {
+			isa = PBXGroup;
+			children = (
+				F312853E2B725EA800C537A4 /* LoadersMocks.swift */,
+				F31285442B7A556A00C537A4 /* CountriesListPresenterMocks.swift */,
+				F312854A2B7A63AE00C537A4 /* CountryInfoPresenterMocks.swift */,
+				F31285422B74123100C537A4 /* Extensions.swift */,
+			);
+			path = Mocks;
+			sourceTree = "<group>";
+		};
 		F321B0CB2B518562009E416C /* CountryInfo */ = {
 			isa = PBXGroup;
 			children = (
@@ -173,9 +218,10 @@
 		F34CB9B72B344A2300F8EF83 = {
 			isa = PBXGroup;
 			children = (
-				F3E05CC92B600FBA006ED22F /* CountriesListApp.xcdatamodeld */,
 				F3E05CC32B5FF7F5006ED22F /* Entity+CoreDataProperties.swift */,
+				F3E05CC92B600FBA006ED22F /* CountriesListApp.xcdatamodeld */,
 				F34CB9C22B344A2300F8EF83 /* CountriesListApp */,
+				F3E05CD72B7252B4006ED22F /* CountriesListAppTests */,
 				F34CB9C12B344A2300F8EF83 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -184,6 +230,7 @@
 			isa = PBXGroup;
 			children = (
 				F34CB9C02B344A2300F8EF83 /* CountriesListApp.app */,
+				F3E05CD62B7252B4006ED22F /* CountriesListAppTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -323,6 +370,18 @@
 			path = CoreData;
 			sourceTree = "<group>";
 		};
+		F3E05CD72B7252B4006ED22F /* CountriesListAppTests */ = {
+			isa = PBXGroup;
+			children = (
+				F312853D2B725DC000C537A4 /* Mocks */,
+				F3E05CD82B7252B4006ED22F /* DataLoaderTests.swift */,
+				F31285462B7A62BD00C537A4 /* ImageLoaderTests.swift */,
+				F31285402B73B3BD00C537A4 /* CountriesListPresenterTests.swift */,
+				F31285482B7A633500C537A4 /* CountryInfoPresenterTests.swift */,
+			);
+			path = CountriesListAppTests;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -343,6 +402,24 @@
 			productReference = F34CB9C02B344A2300F8EF83 /* CountriesListApp.app */;
 			productType = "com.apple.product-type.application";
 		};
+		F3E05CD52B7252B4006ED22F /* CountriesListAppTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F3E05CDC2B7252B4006ED22F /* Build configuration list for PBXNativeTarget "CountriesListAppTests" */;
+			buildPhases = (
+				F3E05CD22B7252B4006ED22F /* Sources */,
+				F3E05CD32B7252B4006ED22F /* Frameworks */,
+				F3E05CD42B7252B4006ED22F /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				F3E05CDB2B7252B4006ED22F /* PBXTargetDependency */,
+			);
+			name = CountriesListAppTests;
+			productName = CountriesListAppTests;
+			productReference = F3E05CD62B7252B4006ED22F /* CountriesListAppTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -355,6 +432,10 @@
 				TargetAttributes = {
 					F34CB9BF2B344A2300F8EF83 = {
 						CreatedOnToolsVersion = 15.0.1;
+					};
+					F3E05CD52B7252B4006ED22F = {
+						CreatedOnToolsVersion = 15.0.1;
+						TestTargetID = F34CB9BF2B344A2300F8EF83;
 					};
 				};
 			};
@@ -372,6 +453,7 @@
 			projectRoot = "";
 			targets = (
 				F34CB9BF2B344A2300F8EF83 /* CountriesListApp */,
+				F3E05CD52B7252B4006ED22F /* CountriesListAppTests */,
 			);
 		};
 /* End PBXProject section */
@@ -390,6 +472,13 @@
 				F321B0EC2B5811D8009E416C /* CountryInfoTitleTableViewCell.xib in Resources */,
 				F3A799232B39BB5D0084F48F /* CustomTableViewCell.xib in Resources */,
 				F321B0DF2B518819009E416C /* CountryDescriptionTableViewCell.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F3E05CD42B7252B4006ED22F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -432,7 +521,30 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		F3E05CD22B7252B4006ED22F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F31285412B73B3BE00C537A4 /* CountriesListPresenterTests.swift in Sources */,
+				F3E05CD92B7252B4006ED22F /* DataLoaderTests.swift in Sources */,
+				F31285472B7A62BD00C537A4 /* ImageLoaderTests.swift in Sources */,
+				F312853F2B725EA800C537A4 /* LoadersMocks.swift in Sources */,
+				F31285492B7A633500C537A4 /* CountryInfoPresenterTests.swift in Sources */,
+				F31285432B74123100C537A4 /* Extensions.swift in Sources */,
+				F31285452B7A556A00C537A4 /* CountriesListPresenterMocks.swift in Sources */,
+				F312854B2B7A63AE00C537A4 /* CountryInfoPresenterMocks.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		F3E05CDB2B7252B4006ED22F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F34CB9BF2B344A2300F8EF83 /* CountriesListApp */;
+			targetProxy = F3E05CDA2B7252B4006ED22F /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		F34CB9D12B344A2400F8EF83 /* LaunchScreen.storyboard */ = {
@@ -621,6 +733,42 @@
 			};
 			name = Release;
 		};
+		F3E05CDD2B7252B4006ED22F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 7CB7M9962J;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "-23.CountriesListAppTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CountriesListApp.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/CountriesListApp";
+			};
+			name = Debug;
+		};
+		F3E05CDE2B7252B4006ED22F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 7CB7M9962J;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "-23.CountriesListAppTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CountriesListApp.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/CountriesListApp";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -638,6 +786,15 @@
 			buildConfigurations = (
 				F34CB9D82B344A2400F8EF83 /* Debug */,
 				F34CB9D92B344A2400F8EF83 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F3E05CDC2B7252B4006ED22F /* Build configuration list for PBXNativeTarget "CountriesListAppTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F3E05CDD2B7252B4006ED22F /* Debug */,
+				F3E05CDE2B7252B4006ED22F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

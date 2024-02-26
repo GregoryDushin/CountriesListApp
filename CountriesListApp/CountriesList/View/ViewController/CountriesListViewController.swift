@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import CoreData
 
 final class CountriesListViewController: UIViewController {
     
@@ -141,17 +142,31 @@ extension CountriesListViewController: UITableViewDataSource, UITableViewDelegat
                 return UITableViewCell()
             }
             
-            if let presenter, let countries = presenter.countries {
-                let country = countries[indexPath.row]
-                cell.configure(with: country)
-                return cell
-            } else {
+            guard let presenter = presenter, let countries = presenter.countries else {
                 return UITableViewCell()
             }
+
+            let country = countries[indexPath.row]
+            cell.configure(with: country)
+            presenter.saveHeightToCoreData(cell.calculateHeight(), for: country)
+
+            return cell
             
         } else {
             let activityIndicatorCell = tableView.dequeueReusableCell(withIdentifier: Constants.Id.activityIndicatorTableViewCell, for: indexPath) as? ActivityIndicatorTableViewCell
             return activityIndicatorCell ?? UITableViewCell()
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        guard let presenter = presenter, let country = presenter.countries else {
+            return UITableView.automaticDimension
+        }
+        
+        if let contentHeight = country[indexPath.row].contentHeight {
+            return contentHeight
+        } else {
+            return UITableView.automaticDimension
         }
     }
     

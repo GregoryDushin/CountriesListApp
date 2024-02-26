@@ -21,9 +21,10 @@ struct Country: Decodable {
     let description: String
     let image: String?
     let countryInfo: CountryInfo
+    let contentHeight: CGFloat?
     
     static func mapToCountryModel(_ countryPersistance: CountryPersistanceObject) -> Country {
-        return Country(
+        Country(
             name: countryPersistance.name,
             continent: countryPersistance.continent,
             capital: countryPersistance.capital,
@@ -34,7 +35,8 @@ struct Country: Decodable {
             countryInfo: CountryInfo(
                 images: countryPersistance.images,
                 flag: countryPersistance.flag
-            )
+            ),
+            contentHeight: CGFloat(truncating: countryPersistance.contentHeight)
         )
     }
 }

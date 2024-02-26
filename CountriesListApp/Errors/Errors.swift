@@ -13,4 +13,5 @@ enum LoaderError: Error {
     case invalidImageData
     case dataFailed
     case loadNextPageFailed
+    case invalidURL
 }

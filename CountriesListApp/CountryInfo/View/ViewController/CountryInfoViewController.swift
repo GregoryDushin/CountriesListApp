@@ -34,7 +34,7 @@ final class CountryInfoViewController: UIViewController {
     
     var presenter: CountryInfoPresenter?
     
-// MARK: - lifecycle
+    // MARK: - lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -46,7 +46,7 @@ final class CountryInfoViewController: UIViewController {
         configureCollectionView()
     }
     
-// MARK: - UI Actions
+    // MARK: - UI Actions
     
     private func configureNavBar() {
         self.navigationController?.navigationBar.tintColor = .white
