@@ -19,7 +19,7 @@ final class CountryInfoPresenterMocks {
         description: "Test Description",
         image: "Test Img", countryInfo:
             CountryInfo(images: ["Test Image 1", "Test Image 2"],
-                        flag: "Test Flag")
+                        flag: "Test Flag"), contentHeight: nil
     )
     
 }

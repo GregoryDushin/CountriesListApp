@@ -36,7 +36,7 @@ struct Country: Decodable {
                 images: countryPersistance.images,
                 flag: countryPersistance.flag
             ),
-            contentHeight: countryPersistance.contentHeight
+            contentHeight: CGFloat(truncating: countryPersistance.contentHeight)
         )
     }
 }

@@ -105,7 +105,7 @@ final class CoreDataManager: CoreDataManagerProtocol {
         
         do {
             if let country = try context.fetch(fetchRequest).first {
-                country.contentHeight = height
+                country.contentHeight = NSNumber(nonretainedObject: height)
                 try context.save()
             }
         } catch {

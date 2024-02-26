@@ -40,7 +40,7 @@ final class DataLoaderMocks {
             descriptionSmall: "test_description_small",
             description: "test_description",
             image: nil,
-            countryInfo: CountryInfo(images: [], flag: "test_flag")
+            countryInfo: CountryInfo(images: [], flag: "test_flag"), contentHeight: nil
         )
         ]
     )
